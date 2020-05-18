@@ -1,4 +1,4 @@
-
+ 
 <!DOCTYPE html>
 
 <html>
@@ -91,10 +91,19 @@ ul, #myUL {
 
 .galeria_productos
 {
+
+  -webkit-box-shadow: inset 0px 0px 6px 0px rgba(32,73,144,1);
+  -moz-box-shadow: inset 0px 0px 6px 0px rgba(32,73,144,1);
+  box-shadow: inset 0px 0px 6px 0px rgba(32,73,144,1);
   height: 100%; background: white; border: 1px solid #9BAB8A; float: left;
+
 }
 
 .filtro {width: 29%;}
+
+.oculto {visibility: hidden;
+          display: none;
+        }
 </style>
 
 <body style="background: #E3F8CD;">  
@@ -106,42 +115,16 @@ ul, #myUL {
             <form>
               <input type="text" name="busqueda" placeholder='Buscar'>
             </form>
-         </div>
-            <ul id="myUL">
-              <!--
-              <li><span class="caret">Beverages</span>
-                <ul class="nested">
-                  <li>Water</li>
-                  <li>Coffee</li>
-                  <li><span class="caret">Tea</span>
-                    <ul class="nested">
-                      <li>Black Tea</li>
-                      <li>White Tea</li>
-                      <li><span class="caret">Green Tea</span>
-                        <ul class="nested">
-                          <li>Sencha</li>
-                          <li>Gyokuro</li>
-                          <li>Matcha</li>
-                          <li>Pi Lo Chun</li>
-                        </ul>
-                      </li>
-                    </ul>
-                  </li>  
-                </ul>
-              </li>-->
+         </div> 
+         @INCLUDE('filtros')
 
-              <div id='marcasLi' class="lista">
-              
-              </div>
-            </ul>
 
       </div>
-      
 
       <div class="col-md-7"  > 
         <div>
           <form class="form-inline" style="float: left; padding: 10px;">
-             <select id="sMarca" class="filtro" onchange="AgregaSubOpciones('sModelo',this.value)">
+             <select id="sMarca" class="filtro" onchange="AgregaSubOpciones('sModelo','dmrc'+this.value)">
                 <option>MARCA</option>
               </select>
 
@@ -183,58 +166,47 @@ ul, #myUL {
       <div class="modal-header">
         <h4 class="modal-title" id="cabecera"></h4>
       </div>
-     <div style="padding: 2em;">
-        <p id="parr1" style="text-align: justify;"> </p>
-        <p id="parr2" style="text-align: justify;"> </p>
-        <p id="parr3" style="text-align: justify;"> </p>
-        <p id="parr4" style="text-align: justify;"> </p>
-
-        <strong>Medication</strong>
-        <p id="parr5" style="text-align: justify;"> </p>
-
-     </div>
     </div>
   </div>
 </div>
+
 
 </html>
 <script type="text/javascript">
   $('#center_wind').css("height", screen.height-312);
   $('#center_wind').css("max-height", screen.height-312); 
-  $('.botonOp').click(function(){$('#qwerty').modal('show');});   
+  $('.botonOp').click(function(){$('#qwerty').modal('show');});  
+
+  /* carga el Arbol de marcas y modelos */
+  LoadDataList(); 
 
 
   function loadArbolMarcas()
   {
 
     for (var i = 0; i < 100; i++) {
-      
-      insertItem('marcasLi','Bebida '+i);
-
-    }
+                                     insertItem('marcasLi','Bebida '+i);
+                                  }
   }
 
 function LoadDataList() { 
-      
-    
+       
     $.get('Leerbase', '{{ csrf_token() }}', function(subpage){ 
         
-
           for (const prop in subpage)
-          {
-              insertItem('marcasLi', subpage[prop], prop);
-              AgregaOpcion('sMarca', subpage[prop]['nombre'], prop );
-          }
-
+                                    {
+                                        insertItem('marcasLi', subpage[prop], prop);
+                                        AgregaOpcion('sMarca', subpage[prop]['nombre'], prop );
+                                    }
           activarMenu();
 
     })  .fail(function() {
-       console.log('Error en carga de Datos');
-  })
+                            console.log('Error en carga de Datos');
+                         })
 }
 
 
-  function insertItem($Posi, $objeto, $id)
+  function insertItem($contenedor, $objeto, $id)
   {   
       $submenu=$objeto['modelos'];
       if ($submenu) { 
@@ -251,11 +223,10 @@ function LoadDataList() {
                 $element="<li id='mrc"+$id+"'><a href='#' class='xNmodel'><span class='xcaret' active>"+$objeto['nombre']+"</span></a><ul class='nested'></ul></li>";
       }
 
-      var txt = document.getElementById($Posi);
-      txt.insertAdjacentHTML('beforeend', $element);
-
-      
+      var txt = document.getElementById($contenedor);
+      txt.insertAdjacentHTML('beforeend', $element); 
   }
+
 
   function activarMenu()
   {
@@ -286,7 +257,7 @@ function LoadDataList() {
                                                           x.remove(i);
                                                     }
 
-        var Elts = document.getElementsByClassName("dmrc"+$cod);
+        var Elts = document.getElementsByClassName($cod);
         for (var i = 0; i < Elts.length; i++) {
                                                   var option = document.createElement("option");    
                                                   option.text = Elts[i].text;
@@ -295,7 +266,7 @@ function LoadDataList() {
                                               }
     }
 
-  LoadDataList();
+ 
   
 
 

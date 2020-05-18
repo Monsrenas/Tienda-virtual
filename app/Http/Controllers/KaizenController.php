@@ -7,7 +7,7 @@ use Kreait\Firebase;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\ServiceAccount;
 use Kreait\Firebase\Database;
-
+use View;
 
 class KaizenController extends Controller
 {
@@ -25,8 +25,6 @@ class KaizenController extends Controller
         ->withDatabaseUri('https://maz-partes.firebaseio.com/')
         ->create();
         return $firebase->getDatabase();
-
-
     }
 
     public function Leerbase()
@@ -34,7 +32,9 @@ class KaizenController extends Controller
            $database=$this->index();
             
            $reference = $database->getReference('marcas');
-           $value = $reference->getValue();
+           $Snapshot=$reference->getSnapshot();
+           /*$Snapshot=$reference->orderByChild('nombre')->equalTo('Sonata')->getSnapshot();*/
+           $value = $Snapshot->getValue();
           return $value;
         }
 
@@ -61,12 +61,21 @@ class KaizenController extends Controller
 
     }
 
-    public function GeneraModeloPersona($request)
-    {
-        $atm = array($request->persona, 'Cliente' => $request->cliente,
-                                        'Proveedor'=>$request->proveedor,  
-                                        'Empleado'=>$request->empleado, 
-                                        'Accionista'=>$request->accionista);
-        return $atm;
+    public function DevuelveBase(Request $request)
+        { 
+           $database=$this->index();
+            
+           $reference = $database->getReference($request->referencia);
+           $value = $reference->getValue();
+          return $value;
+        }
+
+    public function Vista(Request $request){    
+            $view = View::make($request->url);
+            
+            if($request->ajax()){
+                return $view->with('info',$request); 
+            }else return $view->with('info',$request);
     }
+        
 }

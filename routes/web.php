@@ -16,21 +16,29 @@ use Illuminate\Support\Facades\Route;
 Route::get('firebase','KaizenController@index');
 Route::get('Leerbase','KaizenController@Leerbase');
 
+Route::get('DevuelveBase','KaizenController@DevuelveBase');
+Route::get('Vista','KaizenController@Vista');
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
-Route::get('/inventario', function () {
-    return view('menu');
-});
 
 Route::get('Detalle', function () {
     return view('Detalle_Producto');
 });
 
 
-
-Route::get('Lista', function () {
+Route::get('/', function () {
     return view('Lista_Producto');
 });
+
+Route::get('/cat', function () {
+    return view('categorias');
+});
+
+
+
+
+Route::get('/inventario', function () { return view('menu'); });
+
+
+Route::get('/productos', function () { return view('edit_producto'); });
+Route::get('/tmp', function () { return view('codificador.fabricante'); });
