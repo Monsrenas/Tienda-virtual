@@ -1,28 +1,66 @@
+<style>
+ul, #catUL {
+            list-style-type: none;
+          }
 
+#catUL {
+        margin-left: 15px;
+        padding: 0;
+      }
+
+.xNmodel { color: black; }
+.xNmodel :hover { color: white;
+                  background: black; 
+                }
+
+.xcaretX { font-size: 0.74em;
+          cursor: pointer;
+          -webkit-user-select: none; /* Safari 3.1+ */
+          -moz-user-select: none; /* Firefox 2+ */
+          -ms-user-select: none; /* IE 10+ */
+          user-select: none;
+        }
+
+.xcaretX::before {
+  content: "\25B7";
+  color: black;
+  display: inline-block;
+  margin-right: 1px;
+}
+
+.caretX { font-size: 0.74em;
+  cursor: pointer;
+  -webkit-user-select: none; /* Safari 3.1+ */
+  -moz-user-select: none; /* Firefox 2+ */
+  -ms-user-select: none; /* IE 10+ */
+  user-select: none;
+}
+
+.caretX::before {
+  content: "\25B6";
+  color: black;
+  display: inline-block;
+  margin-right: 1px;
+}
+
+.caret-down::before {
+  -ms-transform: rotate(90deg); /* IE 9 */
+  -webkit-transform: rotate(90deg); /* Safari */'
+  transform: rotate(90deg);  
+}
+
+.nestedX { margin-left: -28px;
+  display: none;
+}
+
+.activeX {
+  display: block;
+}
+</style>
 <div id="arbol_categorias">
 	
             <ul id="catUL">
-              <!--
-              <li><span class="caret">Beverages</span>
-                <ul class="nested">
-                  <li>Water</li>
-                  <li>Coffee</li>
-                  <li><span class="caret">Tea</span>
-                    <ul class="nested">
-                      <li>Black Tea</li>
-                      <li>White Tea</li>
-                      <li><span class="caret">Green Tea</span>
-                        <ul class="nested">
-                          <li>Sencha</li>
-                          <li>Gyokuro</li>
-                          <li>Matcha</li>
-                          <li>Pi Lo Chun</li>
-                        </ul>
-                      </li>
-                    </ul>
-                  </li>  
-                </ul>
-              </li>-->
+
             </ul>
 </div>
 
@@ -46,18 +84,19 @@
               										
               									if (exist==null){
               									  	
-                                              
-              									  if (padre>0) {
-              									    
-              									  	$("ul#cat"+padre+" li").append(function(n){  
-              									  		console.log(cod+" hijo de "+padre);
-            	    									return "<li><span>Beverages</span></li><ul class='nested' id='cat"+cod+"' ></ul>";
+                                              	 
+              									  if (padre.length>0) {
+              									   	
+              									  	$("ul#cat"+padre).append(function(n){  
+              									  		$("#pdr"+padre).removeClass("xcaretX");
+              									  		$("#pdr"+padre).addClass("caretX");
+            	    									return "<li><span id='pdr"+cod+"' class='xcaretX' >"+subpage[prop]+"</span><ul class='nestedX' id='cat"+cod+"' ></ul></li>";
         											});
               			
               									  			    } 
               									  else {
-              									  		  console.log(cod);			 
-              									  		 $('#catUL').append("<li><span>Beverages</span></li><ul  class='nested' id='cat"+cod+"' ></ul>");
+              									  		  		 
+              									  		 $('#catUL').append("<li><span id='pdr"+cod+"' class='xcaretX'>"+subpage[prop]+"</span><ul  class='nestedX' id='cat"+cod+"' ></ul></li>");
               									  		 
               									  	   }
               	           					    }
@@ -66,7 +105,15 @@
 
             }      
 
-         activarMenu()
+          var toggler = document.getElementsByClassName("caretX");
+            var i;
+
+            for (i = 0; i < toggler.length; i++) {
+              toggler[i].addEventListener("click", function() { 
+                this.parentElement.querySelector(".nestedX").classList.toggle("activeX");
+                this.classList.toggle("caretX-down");
+              });
+              }
           
 
     }).fail(function() {

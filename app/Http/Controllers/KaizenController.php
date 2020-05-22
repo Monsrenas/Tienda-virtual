@@ -7,6 +7,7 @@ use Kreait\Firebase;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\ServiceAccount;
 use Kreait\Firebase\Database;
+use Kreait\Firebase\Firestore;
 use View;
 
 class KaizenController extends Controller
@@ -27,10 +28,24 @@ class KaizenController extends Controller
         return $firebase->getDatabase();
     }
 
+    public function imagenes()
+    {   
+        $serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/maz-partes-firebase-adminsdk-r7v4n-e80de68492.json');
+        $firebase = (new Factory)
+        ->withServiceAccount($serviceAccount)   
+        ->withDefaultStorageBucket('https://maz-partes.appspot.com')
+        ->createStorage();
+        dd($firebase);
+        return $firebase->getDatabase();
+    }
+
+
     public function Leerbase()
         { 
            $database=$this->index();
-            
+           
+           $imagenes=$this->imagenes();
+
            $reference = $database->getReference('marcas');
            $Snapshot=$reference->getSnapshot();
            /*$Snapshot=$reference->orderByChild('nombre')->equalTo('Sonata')->getSnapshot();*/

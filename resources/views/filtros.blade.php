@@ -6,8 +6,8 @@
     
   } 
 
-  .panel-body { max-height: 440%;
-                height: 440%; 
+  .panel-body { max-height: 50%;
+                height: 50%; 
                 overflow: auto scroll; 
                 background: white;  
              -webkit-box-shadow: inset 0px 0px 14px 0px rgba(32,73,144,1);
@@ -26,7 +26,13 @@ box-shadow: inset 0px 0px 14px 0px rgba(32,73,144,1);}
 .IntHead {font-size: medium;
           width: 100%;
           text-align: center;
-          color: white;}
+          color: blue;
+
+          border-radius: 7px 7px 7px 7px;
+-moz-border-radius: 7px 7px 7px 7px;
+-webkit-border-radius: 7px 7px 7px 7px;
+border: 2px solid blue;
+        }
          
 </style>
 
@@ -34,7 +40,7 @@ box-shadow: inset 0px 0px 14px 0px rgba(32,73,144,1);}
 <div id="faq" role="tablist" aria-multiselectable="true">
 
 <div class="panel panel-default">
-<div class="panel-heading" role="tab" id="questionThree" style="background:#3149D5; color: white;  ">
+<div class="panel-heading" role="tab" id="questionThree">
 <h5 class="panel-title">
 <a class="collapsed" data-toggle="collapse" data-parent="#faq" href="#answerThree" aria-expanded="false" aria-controls="answerThree">
     <div>
@@ -45,43 +51,14 @@ box-shadow: inset 0px 0px 14px 0px rgba(32,73,144,1);}
 </div>
 <div id="answerThree" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="questionThree">
 <div class="panel-body" id="Interrogation">
-
-            <ul id="myUL">
-              <!--
-              <li><span class="caret">Beverages</span>
-                <ul class="nested">
-                  <li>Water</li>
-                  <li>Coffee</li>
-                  <li><span class="caret">Tea</span>
-                    <ul class="nested">
-                      <li>Black Tea</li>
-                      <li>White Tea</li>
-                      <li><span class="caret">Green Tea</span>
-                        <ul class="nested">
-                          <li>Sencha</li>
-                          <li>Gyokuro</li>
-                          <li>Matcha</li>
-                          <li>Pi Lo Chun</li>
-                        </ul>
-                      </li>
-                    </ul>
-                  </li>  
-                </ul>
-              </li>-->
-
-              <div id='marcasLi' class="lista">
-              
-              </div>
-            </ul>
-
-
+  @include('Marcas_Modelos');
 </div>
 </div>
 </div>
 
 
 <div class="panel panel-default">
-<div class="panel-heading" role="tab" id="questionOne" style="background:#3149D5; color: white;">
+<div class="panel-heading" role="tab" id="questionOne">
 <h5 class="panel-title">
 <a data-toggle="collapse" data-parent="#faq" href="#answerOne" aria-expanded="true" aria-controls="answerOne">
   <div>
