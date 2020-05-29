@@ -43,12 +43,10 @@ class KaizenController extends Controller
     public function Leerbase()
         { 
            $database=$this->index();
-           
-           $imagenes=$this->imagenes();
 
            $reference = $database->getReference('marcas');
            $Snapshot=$reference->getSnapshot();
-           /*$Snapshot=$reference->orderByChild('nombre')->equalTo('Sonata')->getSnapshot();*/
+           //$Snapshot=$reference->orderByChild('nombre')->equalTo('Toyota')->orderByChild('nombre')->equalTo('Toyota')->getSnapshot();
            $value = $Snapshot->getValue();
           return $value;
         }
@@ -79,11 +77,19 @@ class KaizenController extends Controller
     public function DevuelveBase(Request $request)
         { 
            $database=$this->index();
-            
            $reference = $database->getReference($request->referencia);
-           $value = $reference->getValue();
+           $Snapshot=$reference->getSnapshot();
+           $value = $Snapshot->getValue();
+           //$value = $reference->getValue();
+
           return $value;
         }
+
+    public function Info_Producto(Request $request)
+     {
+        $view = View::make($request->url);
+        dd($request->info);
+     }
 
     public function Vista(Request $request){    
             $view = View::make($request->url);

@@ -6,16 +6,16 @@
     
   } 
 
-  .panel-body { max-height: 50%;
+.panel-body { max-height: 50%;
                 height: 50%; 
                 overflow: auto scroll; 
                 background: white;  
              -webkit-box-shadow: inset 0px 0px 14px 0px rgba(32,73,144,1);
 -moz-box-shadow: inset 0px 0px 14px 0px rgba(32,73,144,1);
-box-shadow: inset 0px 0px 14px 0px rgba(32,73,144,1);} 
+box-shadow: inset 0px 0px 14px 0px rgba(32,73,144,1);}
+
 .collapsed {
   outline: none;
-
 }
 
 .barra {
@@ -51,7 +51,7 @@ border: 2px solid blue;
 </div>
 <div id="answerThree" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="questionThree">
 <div class="panel-body" id="Interrogation">
-  @include('Marcas_Modelos');
+  @include('filtros.Marcas_Modelos');
 </div>
 </div>
 </div>
@@ -69,7 +69,7 @@ border: 2px solid blue;
 </div>
 <div id="answerOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="questionOne">
 <div class="panel-body" id="categorias">
-      @include('categorias');
+      @include('filtros.categorias');
 </div>
 </div>
 </div>

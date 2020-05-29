@@ -124,7 +124,8 @@ ul, #myUL {
 </html>
 <script type="text/javascript">
     /* carga el Arbol de marcas y modelos */
-  LoadDataList(); 
+LoadDataList();
+
 function activaMenu()
 {
 
@@ -179,16 +180,16 @@ function LoadDataList() {
       $submenu=$objeto['modelos'];
       if ($submenu) { 
 
-      $element="<li><span class='caret' active>"+$objeto['nombre']+"</span><ul class='nested' id='mrc"+$id+"'>";
+      $element="<li><span class='caret' id='"+$id+"' active>"+$objeto['nombre']+"</span><ul class='nested' id='mrc"+$id+"'>";
       
       for (const prop in $submenu)
           {
-             $element=$element+"<li id='mdl"+prop+"'><a  href='#' class='dmrc"+$id+"'>"+$submenu[prop]['nombre']+"</a></li>" ;
+             $element=$element+"<li id='mdl"+prop+"'><a  href='#' id='"+prop+"' class='dmrc"+$id+"'>"+$submenu[prop]['nombre']+"</a></li>" ;
           }
 
       $element=$element+"</ul></li>";
       } else {
-                $element="<li id='mrc"+$id+"'><a href='#' class='xNmodel'><span class='xcaret' active>"+$objeto['nombre']+"</span></a><ul class='nested'></ul></li>";
+                $element="<li id='mrc"+$id+"'><a href='#' id='"+$id+"' class='xNmodel'><span class='xcaret' active>"+$objeto['nombre']+"</span></a><ul class='nested'></ul></li>";
       }
 
       var txt = document.getElementById($contenedor);

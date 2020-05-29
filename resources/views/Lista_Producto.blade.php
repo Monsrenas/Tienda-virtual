@@ -1,119 +1,121 @@
 @extends('welcome')
 
-
 @section('lista_productos')
 
-<style type='text/css'>
-	.marco_producto {
-						border: 1px solid #C4C4C4;
-						float: left;
-						border-radius: 8px ;
-						position: relative;
-					    width: 240px;
-					    height: 322px;
-					    overflow: hidden;
-					    box-shadow: 1px 1px 5px rgba(50,50,50 0.5);
-					    text-align: center;
+<link rel="stylesheet" href="../css/listProducto.css">
 
-					    margin: 4px;
-					}
-
-  	 .marco_producto:hover {
-  transform: scale(1.02); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
-  -webkit-box-shadow: 1px 3px 12px 6px rgba(58,58,58,0.79); 
-box-shadow: 1px 3px 12px 6px rgba(58,58,58,0.79);
-transition-duration:0.6s;
-    
-}
-
-	.marco_foto {
-			width: 98%;
-			height: 112px;
-			text-align: center;
-			padding: 6px;
-			 
-			overflow: hidden;
-	}
-
-	@supports(object-fit: cover){
-    .marco_foto img{
-      height: 100%;
-      object-fit: cover;
-      object-position: center center;
-      padding: 2px;
-    }
-
-	.precio {  text-align: right;
-				padding: 10px;
-			   color: blue;
-			   font-size: 2em;
-			   height: 40px;
-			   margin: 0px;
-			    
-			 }
-
-
-	.boton_comprar { width: 90%;
-					 margin: 0 auto;
-					 height: 35px;
-					 font-size: 1.2em; 
-					 display: block; 
-					 margin-bottom: 2px;
-					}
-
-	.boton_comprar:hover  {   background: blue; 
-							color: white;	} 				
-
-	.boton_agregar { margin: 0 auto;
-					 width: 90%;
-					 height: 35px;
-					 font-size: 1.2em; 
-					 display: block; }
-
-	.boton_agregar:hover  {  background: green; 
-							color: white	}			 
-
-	.descripcion { 	padding: 5px;
-					font-size: .8em;
-					text-align: justify;
-					
-					height: 60px;
-					overflow: hidden;
-				 }
-	.descripcion p { color: #0055ff; 
-					 margin-top: 0px;}			 
-
-	
- 
-</style>
- 
 <div id="Centro">
-	
-  
-
 </div>
 
-
+@INCLUDE('modal')
 <script type="text/javascript">
-
+/*
 for (var i = 1; i < 12; i++) {
 	insertaProducto('Pieza '+i,'19.99','Lugar donde se muestra la descripcion del producto');
-}
+}*/
+  cargarListaProductos('');
+
+  function cargarListaProductos(condiciones)
+  {
+     $data='{{ csrf_token()}}&referencia=productos';	
+
+     $('#Centro').empty();
+
+     $.get('DevuelveBase', $data, function(subpage){ 
+        var $element='';  var $elemenX='';
+        for (const prop in subpage)
+            {  
+ 				if (enFiltro(subpage[prop], condiciones)) {  insertaProducto(subpage[prop],prop); }     
+            }      
+
+    }).fail(function() {
+       console.log('Error en carga de Datos');
+  });
+
+  }
+
+function enFiltro(subpage, condiciones)
+{
+	console.log(condiciones);
+	var modelos=subpage['modelo'];
+	var $descripcion=subpage['descripcion'];
+ 	var flag=0;   //Deben cumplirse un numero determinado de condiciones para que se muestre la pieza
+ 	var indic=0;
+	if (typeof condiciones['palabra'] != "undefined")  //1ra Que alguna palabra coincida con la descripcion
+	{ 
+		  for (var i = 0; i < condiciones['palabra'].length; i++) 
+	          {
+			  	 $ind=($descripcion).toUpperCase().indexOf(condiciones['palabra'][i].toUpperCase());
+			  	 if ($ind>-1) { flag++; } 
+			  }	 
+		  var indic=i;	                                           
+	} 
 
 
+	if (typeof condiciones['modelo'] != "undefined")
+	{ 
+       for (const prop in modelos) 
+			{ 
+			  for (var i = 0; i < condiciones['modelo'].length; i++) 
+	              {
+				  	 if (modelos[prop]==condiciones['modelo'][i]) 
+				  	 	{ flag++; }
+				  }	
+			  			
+			 }
+                                                           
+	}
 
-function insertaProducto($Imagen,$precio, $descripcion)
+
+	if (typeof condiciones['marca'] != "undefined")
+	{ 
+       for (const prop in modelos) 
+			{ 
+			  for (var i = 0; i < condiciones['marca'].length; i++) 
+	              {   
+				  	 if (modelos[prop].substring(0,3)==condiciones['marca'][i]) 
+				  	 	{ flag++; }
+				  }	
+			  			
+			 }
+                                                           
+	}
+
+	if (flag>=indic){return true} else {return false;}	
+}  
+
+function insertaProducto($subpage, $cod)
 { 	
-  $Marco="<div class='marco_producto'> <div class='precio'>"+$precio+"</div><a href='Detalle?img="+$Imagen+"'><div class='marco_foto'><img class='foto' id='imagen' src='"+$Imagen+".jpg' alt='Muestra partes'/></div><div class='descripcion'><p>"+$descripcion+"</p> </div>  </a> <button class='boton_comprar'>Comprar</button> <button class='boton_agregar'>Agregar</button> </div>";
+  var $foto=$subpage['fotos']['001'];
+  var $precio=$subpage['precios']['001'];
+  var $descri=$subpage['descripcion'];
+  var $gale='';
+  var $mods='';
 
-        var txt = document.getElementById('Centro');
-        txt.insertAdjacentHTML('beforeend', $Marco);
+  for (const prop in $subpage['fotos'])
+            {  
+ 				$gale=$gale+"<*>"+$subpage['fotos'][prop];     
+            }
+  for (const prop in $subpage['modelo'])
+            {  
+ 				$mods=$mods+"<*>"+$subpage['modelo'][prop];  
+            }      
+
+  var $paq=$cod+"<*>"+$precio+"<*>"+$descri+$gale;
+  var $ext=$mods;  // En esta variable, ademas de modelos, va codigo de fabricante y otros datos a mostrar
+
+  $Marco="<div class='marco_producto'> <div class='precio'>"+$precio+"</div><a class='btn btn-sm '  data-toggle='modal' data-target='#myModal' data-remoto='"+$paq+"' data-extra='"+$ext+"'><div class='marco_foto'><img class='foto' id='imagen' src='"+$foto+"' alt='Muestra partes'/></div><div class='descripcion'><p>"+$descri+"</p> </div></a> <button class='boton_comprar'>Comprar</button> <button class='boton_agregar' >Agregar</button> </div>";
+
+      var txt = document.getElementById('Centro');
+      txt.insertAdjacentHTML('beforeend', $Marco);
 }
 
- 
 
+      $('body').on('click', 'a[data-toggle="modal"]', function(){
+			  	
+		      Modal('Detalle_Producto',$(this).data("remoto"),$(this).data("extra"));     
+	});
 
 </script>
-
 
 @endsection

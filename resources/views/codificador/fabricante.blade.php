@@ -27,7 +27,7 @@
 
   /*carga el contenido de una colleccion en 2 div en forma de lista <li>*/
   function cargarLista($ElForm,$Memoria, $Visible, $campos)
-  {
+  {  
      $data=$("#"+$ElForm).serialize();
 
      $.get('DevuelveBase', $data, function(subpage){ 
