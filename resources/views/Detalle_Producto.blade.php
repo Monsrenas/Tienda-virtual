@@ -27,6 +27,20 @@
 			      	object-position: center center;
 			      	padding: 2px;
     			}}
+
+    .marcoModelos { display: block; 
+    				width: 100%;  
+    				margin-top: 10px; 
+    				height: 120px; 
+    				background: #e3e3e3; 
+    				border: 1px solid #fff; 
+    				font-size: 0.7em;
+    			   }
+
+    .marcoModelos p { font-size: 1.7em; margin-bottom: 1px; }			   
+
+    .cabeceraMode {  background: #afafaf; width: 50%; float: left;  font-size: 1.5em; }	
+    .ModLisContai {  height: 250px; max-height: 250px;  }		   
 </style>
 
 <div>
@@ -39,31 +53,51 @@
 
 	 <div>
 	   {{$ProdData[2]}}
-	   <div id="imagenes">
+	   <div id="imagenes" >
 	   	<?php 
 	   		for ($i=0; $i <	sizeof($ProdData)-3 ; $i++) { 
 	   			 
-	   			echo "<div class='marcoFoto'><img src='".$ProdData[$i+3]."' /></div>";
+	echo "<a href='javascript:CambiaImagen(\"".$ProdData[$i+3]."\")'><div class='marcoFoto'><img src='".$ProdData[$i+3]."' /></div></a>";
 	   		}
 
 	   	 ?>
+
 	   </div>
 
-	   <div id="listModelos">
-	   	
+	 </div>
+	     
+	   <div class="marcoFoto marcoModelos" >
+	   	 <p>Modelos Compatibles</p>
+	   	 <div class='cabeceraMode'><strong>Marca</strong></div><div class='cabeceraMode'><strong>Modelo</strong></div><br>
+	   	 <div id="listModelos" class="ModLisContai"></div>
 	   </div>
-	</div>
 
 	<div id="contenido">
-   <img id="botella" src="{{$imagen}}" alt="botella con zoom" data-big="{{$imagen}}" data-overlay="" />
-</div>
+      <img id="botella" src="{{$imagen}}" alt="botella con zoom" data-big="{{$imagen}}" data-overlay="" />
+	</div>
 
 </div>
+
 
 <script type="text/javascript">
+	
 $(document).ready(function()
 {
-    $("#botella").mlens(
+	activaLupa(); 
+
+});
+
+function activaLupa()
+{
+  img = document.getElementById('botella');
+  var width = img.clientWidth;
+  var height = img.clientHeight;
+
+   
+  if ((width*height)<136080) {return};
+
+
+   $("#botella").mlens(
     {
         imgSrc: $("#botella").attr("data-big"),   // path of the hi-res version of the image
         lensShape: "circle",                // shape of the lens (circle/square)
@@ -74,18 +108,47 @@ $(document).ready(function()
         imgOverlay: $("#botella").attr("data-overlay"), // path of the overlay image (optional)
         overlayAdapt: true // true if the overlay image has to adapt to the lens size (true/false)
     });
-});
+
+}
+
 
 $modelos=("<?php echo $info->descripcion; ?>").split('<*>');
+
+
+$Modtext="";
+
+ $('#listModelos').append($Modtext);
+
  for (var i = 0; i < $modelos.length; i++) {
- 	if ($modelos[i]<>"") 
+ 	if ($modelos[i]!="") 
  	{
- 		$nombreMarca=$('dmrc'+$modelos[i].substring(0,3));
- 		
+
+ 		$codMarca=$modelos[i].substring(0,3);
+
+ 		$codModel=$modelos[i].substring(3,6);
+ 		$nombreMarca=$('#'+$codMarca+'.caret');
+ 		$nombreModel=$('#'+$codModel+'.dmrc'+$codMarca);
+ 		nm='';
+ 		nc='';
+ 		 
+
+ 		if ($nombreModel.length>0) {nm=$nombreModel[0]['innerText']};
+ 		if ($nombreMarca.length>0) {nc=$nombreMarca[0]['innerText']};    
+
+ 		$Modtext="<div style='width: 50%; float: left; text-align:left;'>"+nc+"</div><div style='width: 50%; float: left; text-align:left;'>"+nm+"</div><br>";
+
+ 		$('#listModelos').append($Modtext);
  	}
  }
 
-
+function CambiaImagen(imagen)
+{
+  var cambio=" <img id='botella' src='"+imagen+"' alt='botella con zoom' data-big='"+imagen+"' data-overlay='' />";
+  $('#contenido').empty();
+  $('#contenido').append(cambio);
+  
+  activaLupa();
+}
 </script>
 
 <script type="text/javascript" src="jquery.mlens-1.7.min.js"></script>

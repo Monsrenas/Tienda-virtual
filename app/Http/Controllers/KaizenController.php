@@ -60,7 +60,7 @@ class KaizenController extends Controller
         ->push($atm);
     }
 
-    public function Actualizar() 
+    public function Actualizar() //DESUSO
     {
         $newPost = $database
         ->getReference('blog/posts')
@@ -97,6 +97,13 @@ class KaizenController extends Controller
             if($request->ajax()){
                 return $view->with('info',$request); 
             }else return $view->with('info',$request);
+    }
+
+    public function CarritoAgregarItem(Request $request)
+    {
+        if ($request->session()->has('MyCarrito')) {
+            echo $request->session()->get('mensaje'); // si existe imprime el valor de la variable mensaje
+        } else { session(['MyCarrito' => []]); }
     }
         
 }

@@ -2,24 +2,29 @@
 
 @section('lista_productos')
 
-<link rel="stylesheet" href="../css/listProducto.css">
+<link rel="stylesheet" href="{{'css/listProducto.css'}}">
+ 
 
 <div id="Centro">
+
 </div>
 
 @INCLUDE('modal')
+@INCLUDE('reloj') 
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 <script type="text/javascript">
 /*
 for (var i = 1; i < 12; i++) {
 	insertaProducto('Pieza '+i,'19.99','Lugar donde se muestra la descripcion del producto');
 }*/
-  cargarListaProductos('');
-
+  //cargarListaProductos('');
+  
   function cargarListaProductos(condiciones)
   {
      $data='{{ csrf_token()}}&referencia=productos';	
-
      $('#Centro').empty();
+     $('#timer').modal('show');
 
      $.get('DevuelveBase', $data, function(subpage){ 
         var $element='';  var $elemenX='';
@@ -27,7 +32,7 @@ for (var i = 1; i < 12; i++) {
             {  
  				if (enFiltro(subpage[prop], condiciones)) {  insertaProducto(subpage[prop],prop); }     
             }      
-
+      $('#timer').modal('hide');
     }).fail(function() {
        console.log('Error en carga de Datos');
   });
@@ -35,12 +40,12 @@ for (var i = 1; i < 12; i++) {
   }
 
 function enFiltro(subpage, condiciones)
-{
-	console.log(condiciones);
+{	
 	var modelos=subpage['modelo'];
 	var $descripcion=subpage['descripcion'];
  	var flag=0;   //Deben cumplirse un numero determinado de condiciones para que se muestre la pieza
  	var indic=0;
+
 	if (typeof condiciones['palabra'] != "undefined")  //1ra Que alguna palabra coincida con la descripcion
 	{ 
 		  for (var i = 0; i < condiciones['palabra'].length; i++) 
@@ -51,21 +56,17 @@ function enFiltro(subpage, condiciones)
 		  var indic=i;	                                           
 	} 
 
-
 	if (typeof condiciones['modelo'] != "undefined")
-	{ 
+	{   
        for (const prop in modelos) 
 			{ 
 			  for (var i = 0; i < condiciones['modelo'].length; i++) 
-	              {
+	              {   
 				  	 if (modelos[prop]==condiciones['modelo'][i]) 
-				  	 	{ flag++; }
-				  }	
-			  			
-			 }
-                                                           
+				  	 	{ flag++;  console.log(condiciones); }
+				  }				
+			 }                                               
 	}
-
 
 	if (typeof condiciones['marca'] != "undefined")
 	{ 
@@ -75,13 +76,12 @@ function enFiltro(subpage, condiciones)
 	              {   
 				  	 if (modelos[prop].substring(0,3)==condiciones['marca'][i]) 
 				  	 	{ flag++; }
-				  }	
-			  			
-			 }
-                                                           
+				  }				
+			 }                                       
 	}
-
+	 
 	if (flag>=indic){return true} else {return false;}	
+
 }  
 
 function insertaProducto($subpage, $cod)
@@ -104,7 +104,7 @@ function insertaProducto($subpage, $cod)
   var $paq=$cod+"<*>"+$precio+"<*>"+$descri+$gale;
   var $ext=$mods;  // En esta variable, ademas de modelos, va codigo de fabricante y otros datos a mostrar
 
-  $Marco="<div class='marco_producto'> <div class='precio'>"+$precio+"</div><a class='btn btn-sm '  data-toggle='modal' data-target='#myModal' data-remoto='"+$paq+"' data-extra='"+$ext+"'><div class='marco_foto'><img class='foto' id='imagen' src='"+$foto+"' alt='Muestra partes'/></div><div class='descripcion'><p>"+$descri+"</p> </div></a> <button class='boton_comprar'>Comprar</button> <button class='boton_agregar' >Agregar</button> </div>";
+  $Marco="<div class='marco_producto'> <div class='precio'>"+$precio+"</div><a class='btn btn-sm '  data-toggle='modal' data-target='#myModal' data-remoto='"+$paq+"' data-extra='"+$ext+"'><div class='marco_foto'><img class='foto' id='imagen' src='"+$foto+"' alt='Muestra partes'/></div><div class='descripcion'><p>"+$descri+"</p> </div></a> <button class='boton_comprar'>Comprar</button> <button class='boton_agregar btn btn-sm '  data-toggle='carAdd'  data-remoto='"+$paq+"' data-extra='"+$ext+"' >Agregar</button> </div>";
 
       var txt = document.getElementById('Centro');
       txt.insertAdjacentHTML('beforeend', $Marco);
@@ -115,6 +115,23 @@ function insertaProducto($subpage, $cod)
 			  	
 		      Modal('Detalle_Producto',$(this).data("remoto"),$(this).data("extra"));     
 	});
+
+
+
+      $('body').on('click', 'button[data-toggle="carAdd"]', function(){
+			 
+
+	     $data='{{ csrf_token()}}&datos='+$(this).data("remoto")+'<<**>>'+$(this).data("extra");	
+	     $('#Centro').empty();
+	     $('#timer').modal('show');
+
+	     $.get('CarritoAgregarItem', $data, function(subpage){ 
+	              Alert('Agregado');
+	    }).fail(function() {
+	       console.log('Error en carga de Datos');
+	  	});  
+
+	});  
 
 </script>
 

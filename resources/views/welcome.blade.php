@@ -15,14 +15,6 @@
 .xNmodel :hover { color: white;
                   background: black; 
                 }
-.carHeader 
-  {
-      display: block;      
-      width: 100%;
-      height: 24px;
-      padding: 4px;
-      background: #e6e6e6;
-  }
 
 .left_wind 
   {
@@ -67,11 +59,8 @@
         </div>
       </div>
 
-      <div class="col-md-3" id="right_wind" style="padding: 4px;">
-        <div class="carHeader">
-          <div class="fa fa-shopping-cart" id="Carrito" style="float: left;"> 10 </div>
-          <div class="fa fa-usd"  style="float: right;"> 100</div>
-        </div>
+      <div class="col-md-3" id="right_wind" style="padding: 2px;">
+        @INCLUDE('Carrito')
       </div>
 
     </div>    
@@ -82,7 +71,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <!-- Modal body -->
-        <div class="modal-body" id="modal-body">
+        <div class="modal-body" id="modal-body" style="max-height: 600px;">
           Modal body..
         </div>
         

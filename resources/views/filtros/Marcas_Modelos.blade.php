@@ -174,6 +174,15 @@ function LoadDataList() {
                          })
 }
 
+function FiltrarModelo(id)
+{
+  var $resul=[]; 
+  $resul['modelo']=[];
+  $resul['palabra']=[];
+  $resul['palabra'].push('tyuiu');
+  $resul['modelo'].push(id);
+   cargarListaProductos($resul);
+}
 
   function insertItem($contenedor, $objeto, $id)
   {   
@@ -184,7 +193,7 @@ function LoadDataList() {
       
       for (const prop in $submenu)
           {
-             $element=$element+"<li id='mdl"+prop+"'><a  href='#' id='"+prop+"' class='dmrc"+$id+"'>"+$submenu[prop]['nombre']+"</a></li>" ;
+             $element=$element+"<li id='mdl"+prop+"'><a  href='javascript:FiltrarModelo(\""+$id+prop+"\");' id='"+prop+"' class='dmrc"+$id+"'>"+$submenu[prop]['nombre']+"</a></li>" ;
           }
 
       $element=$element+"</ul></li>";

@@ -1,4 +1,3 @@
-
 <script type="text/javascript">
 
 
@@ -13,3 +12,4 @@ function Modal($vista,$campo, $descripcion)
 }
 
 </script>
+
