@@ -20,6 +20,8 @@ Route::get('DevuelveBase','KaizenController@DevuelveBase');
 Route::get('Vista','KaizenController@Vista');
 
 Route::get('CarritoAgregarItem','KaizenController@CarritoAgregarItem');
+Route::get('CarritoEliminaItem','KaizenController@CarritoEliminaItem');
+Route::get('CarritoCambiaCanti','KaizenController@CarritoCambiaCanti');
 
 
 Route::get('Detalle', function () {

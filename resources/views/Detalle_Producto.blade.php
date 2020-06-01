@@ -7,11 +7,12 @@
 				    border: 12px solid #fff;
 				    border-radius: 10px;
 				    box-shadow: 1px 1px 5px rgba(50,50,50 0.5);
+
 			   }
 
 	.marcoFoto {
-					width: 80px;
-					height: 80px;
+					width: 70px;
+					height: 70px;
 					text-align: center;
 					padding: 6px;
 					margin-left: 2px;
@@ -45,19 +46,19 @@
 
 <div>
 	<?php 
+
 	   // $info->descripcion   contiene la informacion extra del producto
-	   $ProdData=explode ( '<*>' ,$info->campo , 10 );
-	   $ProdExtr=explode ( '<*>' ,$info->descripcion , 10 );
-	  $imagen=$ProdData[3];
+	   
+	  $imagen=$info['fotos']['0'];
 	 ?>
 
 	 <div>
-	   {{$ProdData[2]}}
+	   {{$info['descripcion']}}
 	   <div id="imagenes" >
 	   	<?php 
-	   		for ($i=0; $i <	sizeof($ProdData)-3 ; $i++) { 
+	   		for ($i=0; $i <	sizeof($info['fotos']) ; $i++) { 
 	   			 
-	echo "<a href='javascript:CambiaImagen(\"".$ProdData[$i+3]."\")'><div class='marcoFoto'><img src='".$ProdData[$i+3]."' /></div></a>";
+	echo "<a href='javascript:CambiaImagen(\"".$info['fotos'][$i]."\")'><div class='marcoFoto'><img src='".$info['fotos'][$i]."' /></div></a>";
 	   		}
 
 	   	 ?>
@@ -73,14 +74,14 @@
 	   </div>
 
 	<div id="contenido">
-      <img id="botella" src="{{$imagen}}" alt="botella con zoom" data-big="{{$imagen}}" data-overlay="" />
+      <img id="botella" style="background: red;" src="{{$imagen}}" alt="botella con zoom" data-big="{{$imagen}}" data-overlay="" />
 	</div>
 
 </div>
 
 
 <script type="text/javascript">
-	
+
 $(document).ready(function()
 {
 	activaLupa(); 
@@ -112,26 +113,23 @@ function activaLupa()
 }
 
 
-$modelos=("<?php echo $info->descripcion; ?>").split('<*>');
-
-
+$modelos="<?php  echo $info['modelo']  ?>";
+$modelos=$modelos.split("<*>");
+ 
 $Modtext="";
 
- $('#listModelos').append($Modtext);
-
- for (var i = 0; i < $modelos.length; i++) {
+ for (var i = 1; i < $modelos.length; i++) {
  	if ($modelos[i]!="") 
  	{
-
  		$codMarca=$modelos[i].substring(0,3);
-
  		$codModel=$modelos[i].substring(3,6);
  		$nombreMarca=$('#'+$codMarca+'.caret');
  		$nombreModel=$('#'+$codModel+'.dmrc'+$codMarca);
- 		nm='';
+ 		nm='-';
  		nc='';
- 		 
 
+ 		if (typeof $nombreMarca[0]== "undefined") {$nombreMarca=$('#'+$codMarca+'.xcaret');} 
+ 		
  		if ($nombreModel.length>0) {nm=$nombreModel[0]['innerText']};
  		if ($nombreMarca.length>0) {nc=$nombreMarca[0]['innerText']};    
 

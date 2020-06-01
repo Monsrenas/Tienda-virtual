@@ -179,7 +179,7 @@ function FiltrarModelo(id)
   var $resul=[]; 
   $resul['modelo']=[];
   $resul['palabra']=[];
-  $resul['palabra'].push('tyuiu');
+  $resul['palabra'].push('monsrenas');
   $resul['modelo'].push(id);
    cargarListaProductos($resul);
 }
@@ -198,7 +198,7 @@ function FiltrarModelo(id)
 
       $element=$element+"</ul></li>";
       } else {
-                $element="<li id='mrc"+$id+"'><a href='#' id='"+$id+"' class='xNmodel'><span class='xcaret' active>"+$objeto['nombre']+"</span></a><ul class='nested'></ul></li>";
+                $element="<li id='mrc"+$id+"'><a href='#' id='"+$id+"' class='xNmodel'><span id='"+$id+"' class='xcaret' active>"+$objeto['nombre']+"</span></a><ul class='nested'></ul></li>";
       }
 
       var txt = document.getElementById($contenedor);

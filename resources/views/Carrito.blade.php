@@ -48,7 +48,7 @@
     			text-align: right;
     			margin-right: 4px;
     			margin-top: -2px;
-    			width: 78%;
+    			width: 58%;
     			height: 24px;
     			float: left;
     			
@@ -78,26 +78,71 @@
 </style>
 
 <div class="form-control carHeader">
-  <div class="fa fa-shopping-cart" id="Carrito" style="float: left;"> 10 </div>
-  <div class="fa fa-usd"  style="float: right;"> 100</div>
+  <div class="fa fa-shopping-cart" id="CarritoCuantos" style="float: left;"> 10 </div>
+  <div class="fa fa-usd"  id="CarritoImporte" style="float: right;"> 100</div>
 </div>
 
 <div id="listaCarrito">
+<?php 
+  if(!isset($_SESSION)){
+                 session_start();
+                 if (!isset($_SESSION['MyCarrito'])) {$_SESSION['MyCarrito']= [];}
+               } 
+
+  $carLista=$_SESSION['MyCarrito']; 
+
+
+?>
 
 <div>	
-	@for ($i = 1; $i < 11; $i++)
-    <div class="carItem">
-    	<a><div class='carFoto'><img src='Pieza {{$i}}.jpg' /></div></a>	
+	@foreach ($carLista as $item)
+    <div class="carItem" id="ITM{{$item['codigo']}}">
+    	<a><div class='carFoto'><img src="{{$item['fotos'][0]}}" /></div></a>	
 		<div class='contenInfo'>
-			 <div class='carPrecio'>256.54</div>
-			 <div class='carQuitar'><button class="btn btn-default fa fa-trash-o fa-lg"></button></div>
-			 <div class='carInfLin'>Codigo del Producto</div>
+			 <div style="float: left; width: 20%;"> 
+			 	<input style="width: 50px;" type="number" id="{{$item['codigo']}}" class="cantidadItem" value="{{$item['cantidad']}}">
+			 </div>
+			 <div class='carPrecio'>{{$item['precio']}} $</div>
+		<div class='carQuitar'>
+		 <button class="btn btn-default fa fa-trash-o fa-lg" data-toggle='carDelItem' data-remoto="{{$item['codigo']}}"></button>
+		</div>
+			 <div class='carInfLin'>Código: {{$item['codigo']}}</div>
 			 <div class='carInfLin'>Nombre del Fabricante</div>
 		</div>
-		<div class='carInfLin'>Descripciom extenza del producto</div>
-	</div>
-	@endfor
+		<div class='carInfLin'>{{$item['descripcion']}}</div>
+	</div> 
+	<?php 
+		$Importe+=	($item['precio']*$item['cantidad']);
+
+	 ?>
+	@endforeach
 </div>
 	
 </div>
 
+
+
+<script type="text/javascript">
+	$('body').on('click', 'button[data-toggle="carDelItem"]', function(){  	
+	     $data='{{ csrf_token()}}&url=Carrito&codigo='+$(this).data("remoto");	
+	     $.get('CarritoEliminaItem', $data, function(subpage){
+	     	   $('#ITM'+subpage).remove();
+	    }).fail(function() {
+	       console.log('Error en carga de Datos');
+	  	});  
+
+	});
+
+
+	$('.cantidadItem').change(function(){
+
+		$data='{{ csrf_token()}}&valor='+$(this)['0']['value']+'&codigo='+$(this)['0']['id'];	
+	     $.get('CarritoCambiaCanti', $data, function(subpage){
+	     	    
+	    }).fail(function() {
+	       console.log('Error en carga de Datos');
+	  	});  
+
+	});
+
+</script>

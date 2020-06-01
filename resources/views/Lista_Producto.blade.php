@@ -18,7 +18,7 @@
 for (var i = 1; i < 12; i++) {
 	insertaProducto('Pieza '+i,'19.99','Lugar donde se muestra la descripcion del producto');
 }*/
-  //cargarListaProductos('');
+  cargarListaProductos('');
   
   function cargarListaProductos(condiciones)
   {
@@ -46,6 +46,8 @@ function enFiltro(subpage, condiciones)
  	var flag=0;   //Deben cumplirse un numero determinado de condiciones para que se muestre la pieza
  	var indic=0;
 
+    console.log(modelos);
+
 	if (typeof condiciones['palabra'] != "undefined")  //1ra Que alguna palabra coincida con la descripcion
 	{ 
 		  for (var i = 0; i < condiciones['palabra'].length; i++) 
@@ -63,7 +65,7 @@ function enFiltro(subpage, condiciones)
 			  for (var i = 0; i < condiciones['modelo'].length; i++) 
 	              {   
 				  	 if (modelos[prop]==condiciones['modelo'][i]) 
-				  	 	{ flag++;  console.log(condiciones); }
+				  	 	{ flag++; }
 				  }				
 			 }                                               
 	}
@@ -89,6 +91,7 @@ function insertaProducto($subpage, $cod)
   var $foto=$subpage['fotos']['001'];
   var $precio=$subpage['precios']['001'];
   var $descri=$subpage['descripcion'];
+  var $fabric=$subpage['codigo_fabricante'];
   var $gale='';
   var $mods='';
 
@@ -101,7 +104,7 @@ function insertaProducto($subpage, $cod)
  				$mods=$mods+"<*>"+$subpage['modelo'][prop];  
             }      
 
-  var $paq=$cod+"<*>"+$precio+"<*>"+$descri+$gale;
+  var $paq=$cod+"<*>"+$fabric+"<*>"+$precio+"<*>"+$descri+$gale;
   var $ext=$mods;  // En esta variable, ademas de modelos, va codigo de fabricante y otros datos a mostrar
 
   $Marco="<div class='marco_producto'> <div class='precio'>"+$precio+"</div><a class='btn btn-sm '  data-toggle='modal' data-target='#myModal' data-remoto='"+$paq+"' data-extra='"+$ext+"'><div class='marco_foto'><img class='foto' id='imagen' src='"+$foto+"' alt='Muestra partes'/></div><div class='descripcion'><p>"+$descri+"</p> </div></a> <button class='boton_comprar'>Comprar</button> <button class='boton_agregar btn btn-sm '  data-toggle='carAdd'  data-remoto='"+$paq+"' data-extra='"+$ext+"' >Agregar</button> </div>";
@@ -121,12 +124,10 @@ function insertaProducto($subpage, $cod)
       $('body').on('click', 'button[data-toggle="carAdd"]', function(){
 			 
 
-	     $data='{{ csrf_token()}}&datos='+$(this).data("remoto")+'<<**>>'+$(this).data("extra");	
-	     $('#Centro').empty();
-	     $('#timer').modal('show');
-
-	     $.get('CarritoAgregarItem', $data, function(subpage){ 
-	              Alert('Agregado');
+	     $data='{{ csrf_token()}}&url=Carrito&campo='+$(this).data("remoto")+'&descripcion='+$(this).data("extra");	
+	     $.get('CarritoAgregarItem', $data, function(subpage){
+	     		   $('#right_wind').empty(); 
+	               $('#right_wind').append(subpage);
 	    }).fail(function() {
 	       console.log('Error en carga de Datos');
 	  	});  

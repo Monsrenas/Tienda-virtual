@@ -60,7 +60,7 @@
       </div>
 
       <div class="col-md-3" id="right_wind" style="padding: 2px;">
-        @INCLUDE('Carrito')
+          @INCLUDE('Carrito')
       </div>
 
     </div>    
@@ -71,7 +71,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <!-- Modal body -->
-        <div class="modal-body" id="modal-body" style="max-height: 600px;">
+        <div class="modal-body" id="modal-body" style="max-height: 600px; overflow: auto;">
           Modal body..
         </div>
         
