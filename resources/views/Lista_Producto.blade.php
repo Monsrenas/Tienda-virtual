@@ -26,11 +26,15 @@ for (var i = 1; i < 12; i++) {
      $('#Centro').empty();
      $('#timer').modal('show');
 
-     $.get('DevuelveBase', $data, function(subpage){ 
+     $.get('Info_Producto', $data, function(subpage){ 
         var $element='';  var $elemenX='';
-        for (const prop in subpage)
+         
+        for (const prop in subpage[0])
             {  
- 				if (enFiltro(subpage[prop], condiciones)) {  insertaProducto(subpage[prop],prop); }     
+ 				if (enFiltro(subpage[0][prop], condiciones)) 
+ 					  {  
+ 					  	insertaProducto(subpage[0][prop],prop, descuentos(subpage, prop)); 
+ 					  }     
             }      
       $('#timer').modal('hide');
     }).fail(function() {
@@ -42,11 +46,12 @@ for (var i = 1; i < 12; i++) {
 function enFiltro(subpage, condiciones)
 {	
 	var modelos=subpage['modelo'];
+	var categoria=subpage['categoria'];
 	var $descripcion=subpage['descripcion'];
  	var flag=0;   //Deben cumplirse un numero determinado de condiciones para que se muestre la pieza
  	var indic=0;
 
-    console.log(modelos);
+  
 
 	if (typeof condiciones['palabra'] != "undefined")  //1ra Que alguna palabra coincida con la descripcion
 	{ 
@@ -56,38 +61,76 @@ function enFiltro(subpage, condiciones)
 			  	 if ($ind>-1) { flag++; } 
 			  }	 
 		  var indic=i;	                                           
-	} 
+	} else {indic=len(condiciones); }
 
 	if (typeof condiciones['modelo'] != "undefined")
 	{   
        for (const prop in modelos) 
 			{ 
 			  for (var i = 0; i < condiciones['modelo'].length; i++) 
-	              {   
-				  	 if (modelos[prop]==condiciones['modelo'][i]) 
-				  	 	{ flag++; }
+	              {   console.log(condiciones['modelo'][i]+" ----- "+modelos[prop]);
+				  	 if (modelos[prop]==condiciones['modelo'][i])     { flag++; }
 				  }				
 			 }                                               
 	}
 
 	if (typeof condiciones['marca'] != "undefined")
-	{ 
+	{  si=0;
        for (const prop in modelos) 
 			{ 
 			  for (var i = 0; i < condiciones['marca'].length; i++) 
 	              {   
-				  	 if (modelos[prop].substring(0,3)==condiciones['marca'][i]) 
-				  	 	{ flag++; }
+				  	 if (modelos[prop].substring(0,3)==condiciones['marca'][i])    {  si=1; }
 				  }				
-			 }                                       
+			 }
+		flag +=si;		                                        
+	}
+
+	if (typeof condiciones['categoria'] != "undefined")
+	{ 
+       for (const prop in categoria) 
+			{ 
+				  	 if (categoria[prop]==condiciones['categoria'])      {  flag++;  }			
+			}                  
+		                      
 	}
 	 
 	if (flag>=indic){return true} else {return false;}	
 
 }  
 
-function insertaProducto($subpage, $cod)
+function descuentos(subpage, prop)
+{	var $valor=0;
+	
+	for (const indice in subpage[1])
+	{	
+		$condiciones=new Array();
+		for (const cond in subpage[1][indice]['condiciones'])
+		{	
+			condicion=subpage[1][indice]['condiciones'][cond];
+			 	
+			if (condicion['campo']=='codigo') {
+												if (condicion['codigo']==prop){
+																                 $valor+=subpage[1][indice]['valor'];
+																               }
+			} else {
+						$condiciones[condicion['campo']]=condicion['codigo'];
+					}
+		}
+	 
+
+		if (enFiltro(subpage[0][prop] ,$condiciones)) {
+			 
+			if (len($condiciones)>0)	{$valor+=subpage[1][indice]['valor'];}}
+
+	}
+
+	return $valor;
+}
+
+function insertaProducto($subpage, $cod, $descuento)
 { 	
+  var $EtiquetaDescuento='';	
   var $foto=$subpage['fotos']['001'];
   var $precio=$subpage['precios']['001'];
   var $descri=$subpage['descripcion'];
@@ -107,7 +150,9 @@ function insertaProducto($subpage, $cod)
   var $paq=$cod+"<*>"+$fabric+"<*>"+$precio+"<*>"+$descri+$gale;
   var $ext=$mods;  // En esta variable, ademas de modelos, va codigo de fabricante y otros datos a mostrar
 
-  $Marco="<div class='marco_producto'> <div class='precio'>"+$precio+"</div><a class='btn btn-sm '  data-toggle='modal' data-target='#myModal' data-remoto='"+$paq+"' data-extra='"+$ext+"'><div class='marco_foto'><img class='foto' id='imagen' src='"+$foto+"' alt='Muestra partes'/></div><div class='descripcion'><p>"+$descri+"</p> </div></a> <button class='boton_comprar'>Comprar</button> <button class='boton_agregar btn btn-sm '  data-toggle='carAdd'  data-remoto='"+$paq+"' data-extra='"+$ext+"' >Agregar</button> </div>";
+
+  if ($descuento>0) {   $EtiquetaDescuento="<div class='EtiDescuento'>"+$descuento+" %</div>";      }
+  $Marco="<div class='marco_producto'> "+$EtiquetaDescuento+" <div class='precio'>"+$precio+"</div><a class='btn btn-sm '  data-toggle='modal' data-target='#myModal' data-remoto='"+$paq+"' data-extra='"+$ext+"'><div class='marco_foto'><img class='foto' id='imagen' src='"+$foto+"' alt='Muestra partes'/></div><div class='descripcion'><p>"+$descri+"</p> </div></a> <button class='boton_comprar'>Comprar</button> <button class='boton_agregar btn btn-sm '  data-toggle='carAdd'  data-remoto='"+$paq+"' data-extra='"+$ext+"' >Agregar</button> </div>";
 
       var txt = document.getElementById('Centro');
       txt.insertAdjacentHTML('beforeend', $Marco);
@@ -118,8 +163,6 @@ function insertaProducto($subpage, $cod)
 			  	
 		      Modal('Detalle_Producto',$(this).data("remoto"),$(this).data("extra"));     
 	});
-
-
 
       $('body').on('click', 'button[data-toggle="carAdd"]', function(){
 			 
@@ -133,6 +176,18 @@ function insertaProducto($subpage, $cod)
 	  	});  
 
 	});  
+
+function len(arr) {
+  var count = -1;
+  for (var k in arr) {
+    if (arr.hasOwnProperty(k)) {
+      count++;
+    }
+  }
+
+  if (count<0) {count=0;}
+  return count;
+}
 
 </script>
 

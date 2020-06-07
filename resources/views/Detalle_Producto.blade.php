@@ -17,6 +17,7 @@
 					padding: 6px;
 					margin-left: 2px;
 					border: 2px solid gray;
+
 					overflow: hidden;
 					float: left;
 			   }
@@ -46,9 +47,7 @@
 
 <div>
 	<?php 
-
 	   // $info->descripcion   contiene la informacion extra del producto
-	   
 	  $imagen=$info['fotos']['0'];
 	 ?>
 
@@ -65,8 +64,7 @@
 
 	   </div>
 
-	 </div>
-	     
+	 </div>	     
 	   <div class="marcoFoto marcoModelos" >
 	   	 <p>Modelos Compatibles</p>
 	   	 <div class='cabeceraMode'><strong>Marca</strong></div><div class='cabeceraMode'><strong>Modelo</strong></div><br>
@@ -74,18 +72,15 @@
 	   </div>
 
 	<div id="contenido">
-      <img id="botella" style="background: red;" src="{{$imagen}}" alt="botella con zoom" data-big="{{$imagen}}" data-overlay="" />
+      <img id="botella" src="{{$imagen}}" alt="botella con zoom" data-big="{{$imagen}}" data-overlay="" />
 	</div>
-
 </div>
-
 
 <script type="text/javascript">
 
 $(document).ready(function()
 {
 	activaLupa(); 
-
 });
 
 function activaLupa()
@@ -109,9 +104,7 @@ function activaLupa()
         imgOverlay: $("#botella").attr("data-overlay"), // path of the overlay image (optional)
         overlayAdapt: true // true if the overlay image has to adapt to the lens size (true/false)
     });
-
 }
-
 
 $modelos="<?php  echo $info['modelo']  ?>";
 $modelos=$modelos.split("<*>");
@@ -134,7 +127,6 @@ $Modtext="";
  		if ($nombreMarca.length>0) {nc=$nombreMarca[0]['innerText']};    
 
  		$Modtext="<div style='width: 50%; float: left; text-align:left;'>"+nc+"</div><div style='width: 50%; float: left; text-align:left;'>"+nm+"</div><br>";
-
  		$('#listModelos').append($Modtext);
  	}
  }

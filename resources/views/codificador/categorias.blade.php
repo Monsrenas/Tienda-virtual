@@ -75,34 +75,25 @@ ul, #catUL {
         
         for (const prop in subpage)
             {
-              
               var xSub=prop.length/3;
               for (var i = 0; i < xSub; i++) {  var $element='';
               									var padre=prop.substring(0,((i-1)*3)+3);
               									cod=prop.substring(0,(i*3)+3);
               									var exist = document.getElementById("cat"+cod);
-              										
+              	
               									if (exist==null){
-              									  	
-                                              	 
-              									  if (padre.length>0) {
-              									   	
+              									  if (padre.length>0) {  	
               									  	$("ul#cat"+padre).append(function(n){  
               									  		$("#pdr"+padre).removeClass("xcaretX");
               									  		$("#pdr"+padre).addClass("caretX");
             	    									return "<li><span id='pdr"+cod+"' class='xcaretX' >"+subpage[prop]+"</span><ul class='nestedX' id='cat"+cod+"' ></ul></li>";
         											});
-              			
               									  			    } 
-              									  else {
-              									  		  		 
-              									  		 $('#catUL').append("<li><span id='pdr"+cod+"' class='xcaretX'>"+subpage[prop]+"</span><ul  class='nestedX' id='cat"+cod+"' ></ul></li>");
-              									  		 
+              									  else {	  		 
+              									  		  $('#catUL').append("<li><span id='pdr"+cod+"' class='xcaretX'>"+subpage[prop]+"</span><ul  class='nestedX' id='cat"+cod+"' ></ul></li>");
               									  	   }
               	           					    }
-
               								}
-
             }      
 
           var toggler = document.getElementsByClassName("caretX");
@@ -113,7 +104,7 @@ ul, #catUL {
                 this.parentElement.querySelector(".nestedX").classList.toggle("activeX");
                 this.classList.toggle("caretX-down");
               });
-              }
+            }
           
 
     }).fail(function() {
@@ -121,5 +112,23 @@ ul, #catUL {
   });
 	}
 
+function FiltrarCategoria(id)
+{
+  var $resul=[];
+  $resul['categoria']=[];
+  $resul['categoria'][0]=id.substring(3);
+  $resul['palabra']=[];
+  $resul['palabra'].push('monsrenas');
+  
+  cargarListaProductos($resul);
+}
+
+
+$('body').on('click', '.xcaretX,.caretX', function(){      
+  
+    if ($(this).hasClass("caretX-down")||$(this).hasClass("xcaretX")){
+      FiltrarCategoria($(this)['0']['id']);    }
+
+});
 
 </script>

@@ -176,11 +176,12 @@ function LoadDataList() {
 
 function FiltrarModelo(id)
 {
-  var $resul=[]; 
+  var $resul=[];
+  $resul['marca']=[]; 
   $resul['modelo']=[];
   $resul['palabra']=[];
   $resul['palabra'].push('monsrenas');
-  $resul['modelo'].push(id);
+  if (id.length>3) {$resul['modelo'].push(id);} else {$resul['marca'].push(id);}
    cargarListaProductos($resul);
 }
 
@@ -189,7 +190,7 @@ function FiltrarModelo(id)
       $submenu=$objeto['modelos'];
       if ($submenu) { 
 
-      $element="<li><span class='caret' id='"+$id+"' active>"+$objeto['nombre']+"</span><ul class='nested' id='mrc"+$id+"'>";
+      $element="<li><span class='caret Xmarcas' id='"+$id+"' active>"+$objeto['nombre']+"</span><ul class='nested' id='mrc"+$id+"'>";
       
       for (const prop in $submenu)
           {
@@ -198,7 +199,7 @@ function FiltrarModelo(id)
 
       $element=$element+"</ul></li>";
       } else {
-                $element="<li id='mrc"+$id+"'><a href='#' id='"+$id+"' class='xNmodel'><span id='"+$id+"' class='xcaret' active>"+$objeto['nombre']+"</span></a><ul class='nested'></ul></li>";
+                $element="<li id='mrc"+$id+"'><a href='#' id='"+$id+"' class='xNmodel'><span id='"+$id+"' class='xcaret Xmarcas' active>"+$objeto['nombre']+"</span></a><ul class='nested'></ul></li>";
       }
 
       var txt = document.getElementById($contenedor);
@@ -206,5 +207,11 @@ function FiltrarModelo(id)
   }
 
 
+$('body').on('click', '.Xmarcas', function(){      
+    if ($(this).hasClass("caret-down")){
+      FiltrarModelo($(this)['0']['id']);    }
+
+});
+ 
  
 </script>

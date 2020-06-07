@@ -51,7 +51,7 @@ border: 2px solid blue;
 </div>
 <div id="answerThree" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="questionThree">
 <div class="panel-body" id="Interrogation">
-  @include('filtros.Marcas_Modelos');
+  @include('codificador.Marcas_Modelos');
 </div>
 </div>
 </div>
@@ -69,7 +69,7 @@ border: 2px solid blue;
 </div>
 <div id="answerOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="questionOne">
 <div class="panel-body" id="categorias">
-      @include('filtros.categorias');
+      @include('codificador.categorias');
 </div>
 </div>
 </div>

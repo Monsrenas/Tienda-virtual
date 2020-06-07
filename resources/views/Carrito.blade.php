@@ -88,9 +88,10 @@
                  session_start();
                  if (!isset($_SESSION['MyCarrito'])) {$_SESSION['MyCarrito']= [];}
                } 
-
+  $Importe=0;
+  $cantItem=0;
   $carLista=$_SESSION['MyCarrito']; 
-
+  
 
 ?>
 
@@ -113,36 +114,39 @@
 	</div> 
 	<?php 
 		$Importe+=	($item['precio']*$item['cantidad']);
-
+		$cantItem+=($item['cantidad']);
 	 ?>
 	@endforeach
 </div>
 	
 </div>
 
-
-
 <script type="text/javascript">
+
+	$('#CarritoImporte').html('{{$Importe}}');
+	$('#CarritoCuantos').html(' {{$cantItem}}');
+    
 	$('body').on('click', 'button[data-toggle="carDelItem"]', function(){  	
-	     $data='{{ csrf_token()}}&url=Carrito&codigo='+$(this).data("remoto");	
+	     $data='{{ csrf_token()}}&url=Carrito&campo=&descripcion=&codigo='+$(this).data("remoto");	
 	     $.get('CarritoEliminaItem', $data, function(subpage){
-	     	   $('#ITM'+subpage).remove();
+	     	   $('#right_wind').empty(); 
+	           $('#right_wind').append(subpage);
+	     	   //$('#ITM'+subpage).remove();
 	    }).fail(function() {
 	       console.log('Error en carga de Datos');
 	  	});  
 
 	});
 
-
 	$('.cantidadItem').change(function(){
 
-		$data='{{ csrf_token()}}&valor='+$(this)['0']['value']+'&codigo='+$(this)['0']['id'];	
-	     $.get('CarritoCambiaCanti', $data, function(subpage){
-	     	    
+		$data='{{ csrf_token()}}&url=Carrito&campo=&descripcion=&valor='+$(this)['0']['value']+'&codigo='+$(this)['0']['id'];	
+	     $.get('CarritoCambiaCanti', $data, function(subpage){   
+	     		     	   $('#right_wind').empty(); 
+	           $('#right_wind').append(subpage);
 	    }).fail(function() {
 	       console.log('Error en carga de Datos');
 	  	});  
-
 	});
 
 </script>

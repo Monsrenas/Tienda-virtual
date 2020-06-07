@@ -77,7 +77,7 @@ class KaizenController extends Controller
     }
 
     public function DevuelveBase(Request $request)
-        { 
+        {  
            $database=$this->index();
            $reference = $database->getReference($request->referencia);
            $Snapshot=$reference->getSnapshot();
@@ -89,8 +89,10 @@ class KaizenController extends Controller
 
     public function Info_Producto(Request $request)
      {
-        $view = View::make($request->url);
-        dd($request->info);
+        $ListProducto=$this->DevuelveBase($request);
+        $request->referencia='descuentos';
+        $ListDescuento=$this->DevuelveBase($request);
+        return [$ListProducto ,$ListDescuento];
      }
 
     public function xVista(Request $request){    
@@ -112,8 +114,6 @@ class KaizenController extends Controller
             }else return $view->with('info',$request);
     }
 
-
-
     public function EstructuraDatosCar(Request $request)
         {
             
@@ -132,13 +132,11 @@ class KaizenController extends Controller
             $Estructura['descripcion']=$ProdData[3];
             $Estructura['fotos']=array_slice($ProdData, 4);
             $Estructura['modelo']=$ext;  
-        
            return $Estructura;
         }
 
     public function CarritoAgregarItem(Request $request)
     {   $Vista=$this->Vista($request);
-
         if(!isset($_SESSION)){
                          session_start();
                          if (!isset($_SESSION['MyCarrito'])) {$_SESSION['MyCarrito']= [];}
@@ -151,38 +149,28 @@ class KaizenController extends Controller
                    $TmpCon[$Vista->info['codigo']]=$Vista->info;
                    $TmpCon[$Vista->info['codigo']]['cantidad']=1;
                  }
-      
-
         //$tmn=count($TmpCon);
-        
         //Session::put('MyCarrito', $TmpCon);
-
         $_SESSION['MyCarrito'] = $TmpCon;
-        
-
         //session(['MyCarrito' => [$Vista->info['codigo']=>$Vista->info]]); 
-        
-
-
         return $Vista;
     }
 
     public function CarritoEliminaItem(Request $request)
-    {
+    {   $Vista=$this->Vista($request);
         if(!isset($_SESSION)){     session_start();     }
-
         $TmpCon = $_SESSION['MyCarrito'];
         unset($TmpCon[$request->codigo]);    
         $_SESSION['MyCarrito'] = $TmpCon;
-        return $request->codigo ;
+        return $Vista;
     }
 
     public function CarritoCambiaCanti(Request $request)
-    {
+    {   $Vista=$this->Vista($request);
         if(!isset($_SESSION)){     session_start();      }    
         $TmpCon = $_SESSION['MyCarrito'];
         $TmpCon[$request->codigo]['cantidad']=$request->valor;    
         $_SESSION['MyCarrito'] = $TmpCon;
-        return $request->codigo ;
+        return $Vista;
     }        
 }

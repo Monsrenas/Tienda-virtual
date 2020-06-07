@@ -17,6 +17,8 @@ Route::get('firebase','KaizenController@index');
 Route::get('Leerbase','KaizenController@Leerbase');
 
 Route::get('DevuelveBase','KaizenController@DevuelveBase');
+Route::get('Info_Producto','KaizenController@Info_Producto');
+
 Route::get('Vista','KaizenController@Vista');
 
 Route::get('CarritoAgregarItem','KaizenController@CarritoAgregarItem');
