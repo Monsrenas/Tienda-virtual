@@ -62,6 +62,33 @@ class KaizenController extends Controller
         ->push($atm);
     }
 
+     public function GuardaRegistro(Request $request) 
+    {   
+        $registro=$this->ValidarProducto($request);
+        //$atm=$this->GeneraModeloPersona($request);
+        
+        //$database=$this->index();
+        //$newPost = $database->getReference('Persona')->push($atm);
+        return $registro;
+    }
+
+    public function ValidarProducto(Request $request)
+    {
+
+        $registro=[        "categoria"=> $request->categoria,
+                            "codigo_adicional"=> $request->codigo_adicional,
+                            "codigo_catalogo"=> $request->codigo_catalogo,
+                            "codigo_fabricante"=> $request->codigo_fabricante,
+                            "descripcion"=> $request->descripcion,
+                            "fotos"=> $request->fotos,
+                            "modelo"=> $request->modelo,
+                            "precios"=> $request->precios
+                          ];
+
+         return $request;         
+
+    }
+
     public function Actualizar() //DESUSO
     {
         $newPost = $database
@@ -172,5 +199,16 @@ class KaizenController extends Controller
         $TmpCon[$request->codigo]['cantidad']=$request->valor;    
         $_SESSION['MyCarrito'] = $TmpCon;
         return $Vista;
-    }        
+    } 
+
+    public   function getImageRelativePathsWfilenames()
+    {
+        $lista=array_merge(glob("*.jp*"),glob("*.png"));
+     
+        //foreach ($lista as $filename) {
+        //echo "$filename -------- size " . filesize($filename) . "<br>";}
+     
+        return $lista;
+    }
+
 }

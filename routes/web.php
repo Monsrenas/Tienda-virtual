@@ -13,11 +13,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('ListaImagenes','KaizenController@getImageRelativePathsWfilenames');
 Route::get('firebase','KaizenController@index');
-Route::get('Leerbase','KaizenController@Leerbase');
 
+Route::get('Leerbase','KaizenController@Leerbase');
 Route::get('DevuelveBase','KaizenController@DevuelveBase');
 Route::get('Info_Producto','KaizenController@Info_Producto');
+Route::post('GuardaRegistro','KaizenController@GuardaRegistro');
 
 Route::get('Vista','KaizenController@Vista');
 

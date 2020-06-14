@@ -27,7 +27,7 @@ box-shadow: inset 0px 0px 14px 0px rgba(32,73,144,1);}
           width: 100%;
           text-align: center;
           color: blue;
-
+          background: #dde6ff;
           border-radius: 7px 7px 7px 7px;
 -moz-border-radius: 7px 7px 7px 7px;
 -webkit-border-radius: 7px 7px 7px 7px;
@@ -73,21 +73,21 @@ border: 2px solid blue;
 </div>
 </div>
 </div>
-<!--
+
 <div class="panel panel-default">
-<div class="panel-heading" role="tab" id="questionTwo" style="background:#3149D5; color: white;">
+<div class="panel-heading" role="tab" id="questionTwo">
 <h5 class="panel-title">
 <a class="collapsed" data-toggle="collapse" data-parent="#faq" href="#answerTwo" aria-expanded="false" aria-controls="answerTwo" target='_blank'>
-        <div>LABORATORY EXAMS</div> 
+        <div class="IntHead">FABRICANTES</div> 
 </a>
 </h5>
 </div>
 <div id="answerTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="questionTwo">
 <div class="panel-body" id="Laboratory"> 
-  
+       @include('codificador.fabricante');
 </div>
 </div>
-</div> -->
+</div> 
 
 </div>
 </div>
@@ -106,6 +106,61 @@ $(function () {
 
   $('.panel-body').css("height", screen.height-510);
   $('.panel-body').css("max-height", screen.height-510);                          
+
+  function SetDatos(id, nombre)
+  {
+
+      var $resul=[];
+      $resul['fabricante']=[]; 
+      $resul['modelo']=nombre;     
+      
+       $resul['fabricante'].push(id);
+      
+       cargarListaProductos($resul);
+
+  }
+
+
+  function FiltrarCategoria(id)
+{
+  var $resul=[];
+  $resul['categoria']=[];
+  $resul['categoria'][0]=id.substring(3);
+  $resul['palabra']=[];
+  $resul['palabra'].push('monsrenas');
+  
+  cargarListaProductos($resul);
+}
+
+
+$('body').on('click', '.xcaretX,.caretX', function(){      
+  
+    if ($(this).hasClass("caretX-down")||$(this).hasClass("xcaretX")){
+      FiltrarCategoria($(this)['0']['id']);    }
+
+});
+
+
+function FiltrarModelo(id)
+{
+  var $resul=[];
+  $resul['marca']=[]; 
+  $resul['modelo']=[];
+  //$resul['palabra']=[];
+  //$resul['palabra'].push('monsrenas');
+  if (id.length>3) {$resul['modelo'].push(id);} else {$resul['marca'].push(id);}
+   cargarListaProductos($resul);
+}
+
+$('body').on('click', '.Xmarcas', function(){      
+    if ($(this).hasClass("caret-down")||$(this).hasClass("xcaret")){
+      FiltrarModelo($(this)['0']['id']);    }
+
+});
+
+$('body').on('click', '.xModelo', function(){      
+      FiltrarModelo($(this).parent().parent().attr('id').substring(3)+$(this)['0']['id']);    
+});
 
   /*PreLoadDataInView('#Interrogation', '&modelo=Interrogation&url=consultation.interrogation', 'flexlist');
    echo VIEW::make("consultation.PhysicalExamination")*/

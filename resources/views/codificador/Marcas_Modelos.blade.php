@@ -156,7 +156,7 @@ function LoadDataList() {
           for (const prop in subpage)
                                     {
                                         insertItem('myUL', subpage[prop], prop);
-                                        AgregaOpcion('sMarca', subpage[prop]['nombre'], prop );
+                                        //AgregaOpcion('sMarca', subpage[prop]['nombre'], prop );
                                     }
          var toggler = document.getElementsByClassName("caret");
             var i;
@@ -174,16 +174,7 @@ function LoadDataList() {
                          })
 }
 
-function FiltrarModelo(id)
-{
-  var $resul=[];
-  $resul['marca']=[]; 
-  $resul['modelo']=[];
-  $resul['palabra']=[];
-  $resul['palabra'].push('monsrenas');
-  if (id.length>3) {$resul['modelo'].push(id);} else {$resul['marca'].push(id);}
-   cargarListaProductos($resul);
-}
+
 
   function insertItem($contenedor, $objeto, $id)
   {   
@@ -194,7 +185,8 @@ function FiltrarModelo(id)
       
       for (const prop in $submenu)
           {
-             $element=$element+"<li id='mdl"+prop+"'><a  href='javascript:FiltrarModelo(\""+$id+prop+"\");' id='"+prop+"' class='dmrc"+$id+"'>"+$submenu[prop]['nombre']+"</a></li>" ;
+          //   $element=$element+"<li id='mdl"+prop+"'><a  href='javascript:FiltrarModelo(\""+$id+prop+"\");' id='"+prop+"' class='dmrc"+$id+"'>"+$submenu[prop]['nombre']+"</a></li>" ;
+          $element=$element+"<li id='mdl"+prop+"'><a href='#' id='"+prop+"' class='dmrc"+$id+" xModelo'>"+$submenu[prop]['nombre']+"</a></li>" ;
           }
 
       $element=$element+"</ul></li>";
@@ -206,12 +198,5 @@ function FiltrarModelo(id)
       txt.insertAdjacentHTML('beforeend', $element); 
   }
 
-
-$('body').on('click', '.Xmarcas', function(){      
-    if ($(this).hasClass("caret-down")){
-      FiltrarModelo($(this)['0']['id']);    }
-
-});
- 
  
 </script>

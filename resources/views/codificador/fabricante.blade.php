@@ -1,6 +1,6 @@
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<div class="container">
-  <div class=""  style="background: white;margin-top: 5%;">
+ 
+
     
   <form class="form-grup" id="formBuscar">
       @csrf
@@ -12,12 +12,12 @@
       
     </div>
 
-    <div id="ListaFabricante" style="color: blue; float: none; height: 400px; overflow: scroll;" class="list-group list-group-flush">
+    <div id="ListaFabricante"  class="list-group list-group-flush ListFabricant">
       
     </div>
 
-  </div><!--.row-->
-</div><!--.container-->
+  
+ 
 
 <script type="text/javascript">
 
@@ -62,25 +62,11 @@
                     {    
                         if ( Elts[i].text.toUpperCase().indexOf($Ocurrencia.toUpperCase())>-1)
                           {
-                            x.insertAdjacentHTML('beforeend',"<li><a href=\'javascript:SetDatos('"+Elts[i].id+"','"+Elts[i].text+"');\' id='"+Elts[i].id+"'>"+Elts[i].text+"</a></li>") ;
+                            x.insertAdjacentHTML('beforeend',"<li><a href=\"javascript:SetDatos('"+Elts[i].id+"','"+Elts[i].text+"');\"  id='"+Elts[i].id+"'>"+Elts[i].text+"</a></li>") ;
+
                           } 
                       }
                                           
-  }
-
-  function SetDatos($id, $text)
-  { 
-    
-    let $campo='{{$info->campo}}';
-    let $descr='{{$info->descripcion}}'; 
-    
-    $('#'+$campo).val($id);
-    $('#'+$descr).text($text);
-      /*  $('#'+$parCampos[0]),value=$parDatos[0];
-        $('#'+$parCampos[1]),value=$parDatos[1];  */
-
-
-    $("[data-dismiss=modal]").trigger({ type: "click" }); /*Cierra ventana modal*/
   }
 
 </script>

@@ -112,23 +112,4 @@ ul, #catUL {
   });
 	}
 
-function FiltrarCategoria(id)
-{
-  var $resul=[];
-  $resul['categoria']=[];
-  $resul['categoria'][0]=id.substring(3);
-  $resul['palabra']=[];
-  $resul['palabra'].push('monsrenas');
-  
-  cargarListaProductos($resul);
-}
-
-
-$('body').on('click', '.xcaretX,.caretX', function(){      
-  
-    if ($(this).hasClass("caretX-down")||$(this).hasClass("xcaretX")){
-      FiltrarCategoria($(this)['0']['id']);    }
-
-});
-
 </script>
