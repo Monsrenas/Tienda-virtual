@@ -18,7 +18,7 @@
 for (var i = 1; i < 12; i++) {
 	insertaProducto('Pieza '+i,'19.99','Lugar donde se muestra la descripcion del producto');
 }*/
-  //cargarListaProductos('');
+  cargarListaProductos('');
   
   function cargarListaProductos(condiciones)
   {
@@ -48,7 +48,7 @@ function enFiltro(subpage, condiciones)
 	var modelos=subpage['modelo'];
 	var categoria=subpage['categoria'];
 	
-	var $descripcion=subpage['descripcion'];
+	var descripcion=subpage['descripcion'];
  	var flag=0;   //Deben cumplirse un numero determinado de condiciones para que se muestre la pieza
  	var indic=0;
 
@@ -57,9 +57,12 @@ function enFiltro(subpage, condiciones)
 	if (typeof condiciones['palabra'] != "undefined")  //1ra Que alguna palabra coincida con la descripcion
 	{ 
 		  for (var i = 0; i < condiciones['palabra'].length; i++) 
-	          {
-			  	 $ind=($descripcion).toUpperCase().indexOf(condiciones['palabra'][i].toUpperCase());
-			  	 if ($ind>-1) { flag++; } 
+	          {	   
+					for (const prop in descripcion) 
+					{ 
+						  	 $ind=(descripcion[prop]).toUpperCase().indexOf(condiciones['palabra'][i].toUpperCase());
+					  	 if ($ind>-1) { flag++; }
+					} 	 
 			  }	 
 		  var indic=i;	                                           
 	}  else { indic=len(condiciones);}
@@ -144,7 +147,7 @@ function insertaProducto($subpage, $cod, $descuento)
 
   var $foto=$subpage['fotos']['001'];
   var $precio=$subpage['precios']['001'];
-  var $descri=$subpage['descripcion'];
+  var $descri=$subpage['descripcion']['001'];
   var $fabric=$subpage['codigo_fabricante'];
   var $gale='';
   var $mods='';
@@ -177,7 +180,7 @@ function insertaProducto($subpage, $cod, $descuento)
 }
 
 
-      $('body').on('click', 'a[data-toggle="modal"]', function(){
+    $('body').on('click', 'a[data-toggle="modal"]', function(){
 			  	
 		      Modal('Detalle_Producto',$(this).data("remoto"),$(this).data("extra"));     
 	});
