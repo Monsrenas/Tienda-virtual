@@ -45,7 +45,8 @@ Route::get('/cat', function () {
 
 
 Route::get('/inventario', function () { return view('menu'); });
+Route::get('listadoProductos','KaizenController@listadoProductos');
 
 
 Route::get('/productos', function () { return view('edit_producto'); });
-Route::get('/tmp', function () { return view('codificador.fabricante'); });
+Route::get('/tmp', function () { return view('administracion.listadoProducto'); });

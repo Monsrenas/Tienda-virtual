@@ -43,12 +43,12 @@
 
     <div class="row" id="work">
       
-      <div class="col-md-2 left_wind" id="left_wind">
-         <div class="form-grup" style="margin-left: 15px;"  >
+      <div class="col-md-3 left_wind" id="left_wind">
+         <!--<div class="form-grup" style="margin-left: 15px;"  >
             <form>
               <input type="text" name="busqueda" placeholder='Buscar'>
             </form>
-         </div> 
+         </div>--> 
          @INCLUDE('filtros.filtros')
       </div>
 
@@ -59,7 +59,7 @@
         </div>
       </div>
 
-      <div class="col-md-3" id="right_wind" style="padding: 2px;">
+      <div class="col-md-2" id="right_wind" style="padding: 2px;">
           @INCLUDE('Carrito')
       </div>
 

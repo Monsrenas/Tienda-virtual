@@ -2,7 +2,7 @@
 <br>
 <style type="text/css">
   .panel {
-    margin-bottom: 2px;
+    margin-bottom: 12px;
     
   } 
 

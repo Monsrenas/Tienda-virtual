@@ -8,11 +8,12 @@
 				      height: 36px;
 				      padding: 4px;
 				      background: blue;
+				      margin-right: -20px;
 				  }
 
 		.carFoto {
 					width: 20%;
-					height: 60px;
+					height: 46px;
 					text-align: center;
 					padding: 6px;
 					margin-left: 2px;
@@ -30,42 +31,49 @@
 			      	padding: 2px;
     			}}
 
-    .contenInfo{
-    				font-size: 0.8em;
+    .contenInfo{	line-height: 1.6em;
+    				font-size: 0.9em;
 					width: 72%;
 					height: 60px;
 					text-align: left;
 					padding: 0px;
 					margin-left: 2px;
-					margin-top: 0px;
+					margin-top: 2px;
 					 
+
 					overflow: hidden;
 					float: left;
 			   }
 
     .carPrecio{ 
-    			font-size: 1.4em;
+    			font-size: 1.2em;
     			text-align: right;
-    			margin-right: 4px;
+    			margin-right: 12px;
     			margin-top: -2px;
-    			width: 58%;
+    			width: 60%;
     			height: 24px;
     			float: left;
     			
     		  }
 
-    .carQuitar{	text-align: right;
-    			margin-top: 1px;
-    			width: 20%;
+    .carQuitar{	
+    			margin-left: -12px;
+    			width: 10%;
     			height: 18px;
-    			float: right;
+    			float: left;
+    			 
+    			text-align: left;
     			
     		  }
-    .carInfLin{
+    .carInfLin{ color: #818695;
+    	        padding:4px;
     			margin-top: -2px;
     			width: 100%;
     			height: 20px;
     			float: left;
+    			font-size: 0.7em;
+    			line-height: 0.9em;
+    			/*font-weight: bold;*/
     			
     		  }
     .carItem {  height: 88px;
@@ -78,8 +86,8 @@
 </style>
 
 <div class="form-control carHeader">
-  <div class="fa fa-shopping-cart" id="CarritoCuantos" style="float: left;"> 10 </div>
-  <div class="fa fa-usd"  id="CarritoImporte" style="float: right;"> 100</div>
+  <div class="fa fa-shopping-cart" id="CarritoCuantos" style="float: left;"></div>
+  <div class="fa fa-usd"  id="CarritoImporte" style="float: right;"></div>
 </div>
 
 <div id="listaCarrito">
@@ -98,7 +106,7 @@
 <div>	
 	@foreach ($carLista as $item)
     <div class="carItem" id="ITM{{$item['codigo']}}">
-    	<a><div class='carFoto'><img src="{{$item['fotos'][0]}}" /></div></a>	
+    	<a><div class='carFoto'><img src="{{$item['fotos'][0]  ?? '' }}" /></div></a>	
 		<div class='contenInfo'>
 			 <div style="float: left; width: 20%;"> 
 			 	<input style="width: 50px;" type="number" id="{{$item['codigo']}}" class="cantidadItem" value="{{$item['cantidad']}}">
@@ -108,13 +116,15 @@
 		 <button class="btn btn-default fa fa-trash-o fa-lg" data-toggle='carDelItem' data-remoto="{{$item['codigo']}}"></button>
 		</div>
 			 <div class='carInfLin'>Código: {{$item['codigo']}}</div>
-			 <div class='carInfLin'>Nombre del Fabricante</div>
+			 <div class='carInfLin'>{{$item['fabricante'] ?? ''}}</div>
 		</div>
-		<div class='carInfLin'>{{$item['descripcion']}}</div>
+		<div class='carInfLin' style="font-weight: bold; color: black;">{{$item['descripcion']}}</div>
 	</div> 
-	<?php 
-		$Importe+=	($item['precio']*$item['cantidad']);
-		$cantItem+=($item['cantidad']);
+	<?php  
+		$precio=(isset($item['precio']) ? (double) $item['precio']:1);
+		$cantid=(isset($item['cantidad']) ? (double) $item['cantidad'] : 0);
+		$Importe+=($precio*$cantid);
+		$cantItem+=$cantid;
 	 ?>
 	@endforeach
 </div>

@@ -37,7 +37,7 @@
               $element=$element+"<li><a id='"+prop+"' class='guardados'>"+subpage[prop]+"</a></li>" ;
                
               $datos=[prop.toString(),subpage[prop].toString()];
-              $elemenX=$elemenX+"<li><a href=\"javascript:SetDatos('"+prop+"','"+subpage[prop]+"');\" id='"+prop+"' >"+subpage[prop]+"</a></li>" ;
+              $elemenX=$elemenX+"<li><a href=\"javascript:SetDatos('"+prop+"','"+subpage[prop]+"');\" id='"+prop+"' class='fbct' >"+subpage[prop]+"</a></li>" ;
             }      
 
           var txt = document.getElementById($Memoria);

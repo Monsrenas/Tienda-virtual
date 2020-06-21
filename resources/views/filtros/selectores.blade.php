@@ -6,7 +6,7 @@
                     <button class="btn btn-secondary" id="btnbusqueda"><i class="fa fa-search"></i></button>
               </div>
           </div>
-
+<!--
           <form class="form-inline" style="float: left; padding: 2px;">
              
              <select id="sMarca" class="filtro" onchange="AgregaSubOpciones('sModelo','dmrc'+this.value)">
@@ -21,7 +21,7 @@
                 <option>CATEGORÍA</option>
               </select>
 
-          </form>
+          </form>   -->
         </div>
 
 <script type="text/javascript">

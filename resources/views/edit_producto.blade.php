@@ -16,59 +16,77 @@
   border: none;
   color: gray;
 }
+
+.BrrDesc {
+  border: none;
+  color: gray;
+  float: left;
+}
+
+label { font-weight: bold;
+
+}
+
 </style>
- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+ 
+
 <div id="Centro" style="font-size: 0.8em;">
 	
-	<form action="{{url('GuardaRegistro')}}" method="POST" class="form-horizontal md-form" style="font-size: .85em;">
-  @csrf
+	<form  method="POST"  action="javascript:GuardarDatos()" class="form-horizontal md-form" id="datosproducto" style="font-size: .85em;">
     <div class="col-lg-10 card-header">
 
               <div class="form-group row NatJur" style="margin-bottom: 3px; ">
                   <label class="col-lg-2 col-form-label text-right" for="codigo_producto">Código Producto:</label>
                   <div class="col-sm-3">
-                    <input type="text" class="form-control form-control-sm" id="codigo_producto" name="codigo_producto" placeholder="">
+                    <input type="text" class="form-control form-control-sm" id="codigo_producto" name="codigo_producto" placeholder="Código">
+                    <div class=" col-sm-12 text-right" style="padding: 2px;" >
+                          <button  type="button" class="btn btn-success btn-sm" onclick="agrDescripcion('codigo','codigo_producto','')">
+                            <i class="fa fa-plus"></i>
+                          </button>
+                    </div>
+                    
+                    <div class="col-sm-12" id="grupocodigo">  </div>
                   </div>
-                  <div class="col-sm-3">
-                    <input type="text" class="form-control form-control-sm" id="descripcion" name="descripcion" placeholder="Descripcion del producto" style="width: 500px;" required=''>
+
+                  <input type="text"  id="cantidad" name="cantidad" value="0" hidden="">
+
+                  <div class="col-sm-7" id="grupodescripcion">
+                    <input type="text" class="form-control form-control-sm" id="Xdescripcion" name="descripcion[]" placeholder="Descripcion del producto" required=''>
+                     <div class=" col-sm-12 text-right" style="padding: 2px;" >
+                          <button  type="button" class="btn btn-success btn-sm" onclick="agrDescripcion('descripcion','','')">
+                            <i class="fa fa-plus"></i>
+                          </button>
+                    </div>                    
                   </div>
               </div>
+ 
+
 
               <div class="form-group row NatJur" style="margin-bottom: 3px; ">
-                  <label class="col-lg-2 col-form-label text-right" for="codigo_catalogo">Código Catálogo:</label>
-                  <div class="col-sm-3">
-                    <input type="text" class="form-control form-control-sm" id="codigo_catalogo" name="codigo_catalogo" required=''>
-                  </div>
-              </div>
-
-              <div class="form-group row NatJur" style="margin-bottom: 3px; ">
-                  <label class="col-lg-2 col-form-label text-right" for="codigo_adicional">Código Adicional:</label>
-                  <div class="col-sm-3">
-                    <input type="text" class="form-control form-control-sm" id="codigo_adicional" name="codigo_adicional" required="">
-                  </div>
-              </div>
-
-              <div class="form-group row NatJur" style="margin-bottom: 3px; ">
-                  <label class="col-lg-2 col-form-label text-right" for="codigo_fabricante">Código Fabricante:</label>
+                  <label class="col-lg-2 col-form-label text-right" for="codigo_fabricante">Fabricante:</label>
                   <div class="col-sm-3 input-group" >
                     <input type="text" class="form-control form-control-sm" id="codigo_fabricante" name="codigo_fabricante" placeholder="">
                     <div class="input-group-btn input-group-append">
                           <button  type="button" class="btn btn-info btn-sm"data-toggle="modal" data-target="#myModal" onclick="Modal('codificador.ObtenCodigoFabricante','codigo_fabricante','descr_fabricante')"><i class="fa fa-search"></i></button>
                     </div>
                   </div>
-                  <label class="col-lg-2 col-form-label text-left" id="descr_fabricante">Descripcion</label>
+                  <label class="col-lg-2 col-form-label text-left" id="descr_fabricante"></label>
               </div>
 
-              <div class="form-group row" style="margin-bottom: 3px; ">
-                  <label class="col-lg-2 col-form-label text-right" for="estado">Unidad de Medida:</label>
-                  <div class="col-lg-2">
-                    <select class="form-control form-control-sm" id="codigo_unidad" name="codigo_unidad" style="font-size: 1em;">
-
-                      <option>-</option>
-
-                    </select>
+            <div id="medidas" class="grupoDT">
+             <div class="form-group row NatJur" style="margin-bottom: 3px; ">
+                  <label class="col-lg-2 col-form-label text-right" for="precio_Venta">Medidas:</label>
+                  <div class="col-sm-3 input-group">
+                    <input type="text" class="form-control form-control-sm" id="Medidas" placeholder="">
+                    <div class="input-group-btn input-group-append">
+                      <button type="button" class="btn btn-success btn-sm" onclick="
+                      agrElemento('', '','medidas' ,'MedidasGrupo');"><i class="fa fa-plus"></i></button>
+                    </div>
                   </div>
+
               </div>
+            </div>
 
             <div id="categoria" class="grupoDT">    
               <div class="form-group row NatJur" style="margin-bottom: 3px; ">
@@ -131,37 +149,59 @@
               </div>
               </div>
       		  
-      		  <div class="col-lg-10 text-right">
-    				<button class="btn btn-success" type="submit">Guardar <i class="fa fa-save"></i></button>
+      		  <div class="col-lg-10 text-right" id="espacioGuardar" hidden="">
+    				<button class="btn btn-success" id="GuardarForm" type="submit">Guardar <i class="fa fa-save"></i></button>
  	  		  </div> 
        </div>
 
   	 </form>
 </div>
 
+
 @INCLUDE('modal')
 <script type="text/javascript">
 
-  $("#codigo_producto").focus();
+$("body").on('change','input:not(#codigo_producto)', function(){
+  $('#espacioGuardar').removeAttr('hidden');
+});  
 
-  $('body').on('focusout', '#codigo_producto', function(){      
-  
-      if ($(this)[0].value=='') { $("#codigo_producto").focus(); return;}
-      
-     $data='{{ csrf_token()}}&referencia=productos/'+($(this)[0].value);  
+$("#codigo_producto").focus();
 
-     $.get('DevuelveBase', $data, function(subpage){ 
-          //console.log(subpage);
-          RellenaFormulario(subpage);
-    }).fail(function() {
-       console.log('Error en carga de Datos');
-  });    
+$("#codigo_producto").focusin( function(){      $(this).select();    });
 
- });
+$('body').on('focusout', '#codigo_producto', function(){      
+
+    $('.xGrupos').remove();
+    $('input:not(#codigo_producto)').val('');
+
+    if ($(this)[0].value=='') { $("#codigo_producto").focus(); return;}
+    
+   $data='{{ csrf_token()}}&referencia=productos/'+($(this)[0].value);  
+
+   $.get('DevuelveBase', $data, function(subpage){ 
+        //console.log(subpage);
+        $('#espacioGuardar').attr("hidden",true);
+        RellenaFormulario(subpage);
+  }).fail(function() {
+     console.log('Error en carga de Datos');
+});    
+
+});
+
+function GuardarDatos()
+{
+  var data=$('#datosproducto').serialize();
+     var data="_token={{ csrf_token()}}&"+data;
+     console.log(data);
+      $.post('GuardaRegistro', data, function(subpage){  
+        
+              $('#espacioGuardar').attr("hidden",true);
+              $("#codigo_producto").focus();
+    });
+}
 
 function RellenaFormulario(subpage)
-{
-     $('.xGrupos').remove(); 
+{ 
      for (const prop in subpage)
      { 
        if (typeof subpage[prop] !== 'undefined') { 
@@ -177,13 +217,14 @@ function RellenaFormulario(subpage)
 
 function ubica(prop,subpage)
 {
-
    switch(prop) 
    {
       case 'categoria': 
                     for (const ind in subpage) { NuevaCategoria(subpage[ind],''); }
             break;
-
+      case 'medidas':
+                    for (const ind in subpage) {agrElemento(subpage[ind], '','medidas' ,'MedidaGrupo');} 
+                    break;
       case 'precios':
                     for (const ind in subpage) {agrElemento(subpage[ind], '','precios' ,'PrecioGrupo');} 
                     break;
@@ -193,9 +234,10 @@ function ubica(prop,subpage)
       case 'fotos': 
                   for (const ind in subpage) {agrFoto(subpage[ind]);} 
                   break;
-
+      case 'descripcion': 
+                  for (const ind in subpage) {agrDescripcion('descripcion','',subpage[ind]);} 
+                  break;          
   }
-
 }
 
 function agregaCategoria()
@@ -238,7 +280,7 @@ function NuevaCategoria($cod, $des)
      
     agrElemento($cod, $des, 'categoria','CateGrupo');
 
-     if ($des.trim().length==0) {
+    if ($des.trim().length==0) {
                                      $data='{{ csrf_token()}}&referencia=categorias/'+($cod);  
                                      $.get('DevuelveBase', $data, function(subpage){ 
                                         if (subpage.trim().length==0) {   $('#CatDesc'+$cod).parent().remove();   } 
@@ -258,7 +300,6 @@ function NuevoModelo($cod, $des)
      if ($des.trim().length==0) {
                                      $data='{{ csrf_token()}}&referencia=marcas/'+($cod.substring(0,3));  
                                      $.get('DevuelveBase', $data, function(subpage){ 
-                                        console.log(subpage['nombre']);
                                         if (subpage.length==0) {   $('#CatDesc'+$cod).parent().remove();   } 
                                         else { $('#CatDesc'+$cod).text(subpage['nombre']+": "+subpage['modelos'][$cod.substring(3)]['nombre']); }
                                           
@@ -277,12 +318,12 @@ function NuevoPrecio()
   $('#precio_Venta').val('');
 }
 
-
 $('body').on('click', '.BrrCateg', function()  //Boton que borra categoria
 {
     $(this).parent().parent().remove();  
     //$(this).parent().siblings().find('input').val()
     //$(this).parent().parent().attr('class')
+    $('#espacioGuardar').removeAttr('hidden');
 });
 
 
@@ -304,6 +345,29 @@ $('body').on('change', '#foto', function()  //Boton que borra categoria
         agrFoto($(this).val());}
 });
 
+function XXXagrDescripcion(valor, campo, clase,grupo)
+{
+  if (($('.descripElm').length==0)&&($('#Xdescripcion').val()=='')) {$('#Xdescripcion').val(valor); return;}
+  boton="<div class='col-sm-1'><button class='btn btn-outline-danger BrrCateg btn-sm'><i class='fa fa-trash'></i></button></div>";
+  NewDescr="<div class='descripElm xGrupos form-group row'><div class='col-sm-11'><input type='text' class='form-control form-control-sm' name='descripcion[]'  value='"+valor+"' placeholder='Descripción alternativa' required=''></div>"+boton+"</div>";
+
+  $('#descripciones').append(NewDescr);
+}
+
+function agrDescripcion(campo,referencia ,valor)
+{
+  referencia= (referencia=='') ? 'X'+campo : referencia;
+  MyPlaceholder=$('#'+referencia).attr("placeholder");
+
+  if (($('.'+campo+'Elm').length==0)&&($('#'+referencia).val()=='')) {$('#'+referencia).val(valor); return;}
+  boton="<div class='col-sm-1'><button class='btn btn-outline-danger BrrCateg btn-sm'><i class='fa fa-trash'></i></button></div>";
+  NewDescr="<div class='"+campo+"Elm xGrupos form-group row'><div class='col-sm-10'><input type='text' class='form-control form-control-sm' name='"+campo+"[]'  value='"+valor+"' placeholder='"+MyPlaceholder+"' required=''></div>"+boton+"</div>";
+
+  $('#grupo'+campo).append(NewDescr);
+  console.log($('.'+campo+"Elm input:last"));
+  $('.'+campo+"Elm input:last").focus();
+}
+
 function agrElemento($cod, $des, $grupo,$clase)
 {
 
@@ -322,8 +386,5 @@ function agrFoto($camino)
      $('#foto').append(NewCateg);
 }
 </script>
-
-
-
 
 @endsection

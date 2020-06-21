@@ -3,7 +3,6 @@
 @section('lista_productos')
 
 <link rel="stylesheet" href="{{'css/listProducto.css'}}">
- 
 
 <div id="Centro">
 
@@ -143,15 +142,20 @@ function descuentos(subpage, prop)
 
 function insertaProducto($subpage, $cod, $descuento)
 { 	
+  var desIndice=(($subpage['descripcion']) ? Object.getOwnPropertyNames($subpage['descripcion']) : "");
+  var preIndice=(($subpage['precios']) ? Object.getOwnPropertyNames($subpage['precios']) : "");
+  var fotIndice=(($subpage['fotos']) ? Object.getOwnPropertyNames($subpage['fotos']) : "");	
+
   var $EtiquetaDescuento='';	
 
-  var $foto=$subpage['fotos']['001'];
-  var $precio=$subpage['precios']['001'];
-  var $descri=$subpage['descripcion']['001'];
-  var $fabric=$subpage['codigo_fabricante'];
+  var $foto=(($subpage['fotos']) ? $subpage['fotos'][fotIndice[0]] : "arbol.png");
+  var $precio=(($subpage['precios']) ? $subpage['precios'][preIndice[0]] : "");
+  var $descri=(($subpage['descripcion']) ? $subpage['descripcion'][desIndice[0]] : "");
+  var $fabric=(($subpage['codigo_fabricante']) ? $subpage['codigo_fabricante'] : "");
   var $gale='';
   var $mods='';
-
+  var $fabricante=($('#'+$fabric+'.guardados').length>0) ? 'Fabricante: '+$('#'+$fabric+'.guardados')[0]['innerText'] :'';
+  var $EtiquetasPrecio="<div class='precViej'> </div><div class='precio'>"+$precio+"</div>";
   for (const prop in $subpage['fotos'])
             {  
  				$gale=$gale+"<*>"+$subpage['fotos'][prop];     
@@ -161,34 +165,47 @@ function insertaProducto($subpage, $cod, $descuento)
  				$mods=$mods+"<*>"+$subpage['modelo'][prop];  
             }      
    
-
+   if ($gale=='') {$gale='<*>arbol.png';}         
+            
   var $precioDesc=$precio;
   if ($descuento>0) {   $EtiquetaDescuento="<div class='EtiDescuento'>-"+$descuento+" %</div>";    
-  						$precioDesc=($precio-(($precio*$descuento)/100)).toFixed(2);;	
+  						$precioDesc=($precio-(($precio*$descuento)/100)).toFixed(2);
+  						$EtiquetasPrecio="<div class='precViej'>"+$precio+"</div><div class='precio'>"+$precioDesc+"</div>";
   					  }
 
   
-  var $paq=$cod+"<*>"+$fabric+"<*>"+$precioDesc+"<*>"+$descri+$gale;
+  var $paq=$cod+"<*>"+$fabricante+"<*>"+$precioDesc+"<*>"+$descri+$gale;
   var $ext=$mods;  // En esta variable, ademas de modelos, va codigo de fabricante y otros datos a mostrar
 
-
+   	  
   
-  $Marco="<div class='marco_producto'> "+$EtiquetaDescuento+" <div class='precio'>"+$precio+"</div><a class='btn btn-sm '  data-toggle='modal' data-target='#myModal' data-remoto='"+$paq+"' data-extra='"+$ext+"'><div class='marco_foto'><img class='foto' id='imagen' src='"+$foto+"' alt='Muestra partes'/></div><div class='descripcion'><p>"+$descri+"</p> </div></a> <button class='boton_comprar'>Comprar</button> <button class='boton_agregar btn btn-sm '  data-toggle='carAdd'  data-remoto='"+$paq+"' data-extra='"+$ext+"' >Agregar</button> </div>";
+  
+
+
+  $Marco="<div class='marco_producto'> "+$EtiquetaDescuento+" "+$EtiquetasPrecio+"<a class='btn btn-sm '  data-toggle='modal' data-target='#myModal' data-remoto='"+$paq+"' data-extra='"+$ext+"'><div class='marco_foto'><img class='foto' id='imagen' src='"+$foto+"' alt='Muestra partes'/></div><div class='descripcion'><p style='color: black; font-weight: bold; margin-bottom: -1px;'>"+$descri+"</p><p>"+$fabricante+"</p> </div></a><button class='boton_agregar btn btn-sm fa fa-shopping-cart'  data-toggle='carAdd'  data-remoto='"+$paq+"' data-extra='"+$ext+"' ><input class='cantCar' type'text'  placeholder='cantidad'> <div class='TextAgr'>Agregar</div></button> </div>";
 
       var txt = document.getElementById('Centro');
       txt.insertAdjacentHTML('beforeend', $Marco);
 }
-
+	
+$('body').on('click', '.cantCar', function(eve)	
+	{
+		 $('.boton_agregar').preventDefault();
+	});	
 
     $('body').on('click', 'a[data-toggle="modal"]', function(){
 			  	
 		      Modal('Detalle_Producto',$(this).data("remoto"),$(this).data("extra"));     
 	});
 
-      $('body').on('click', 'button[data-toggle="carAdd"]', function(){
-			 
+$('body').on('click', 'button[data-toggle="carAdd"]', function(){
 
-	     $data='{{ csrf_token()}}&url=Carrito&campo='+$(this).data("remoto")+'&descripcion='+$(this).data("extra");	
+		 $cantidad=($(this).children('input')[0]['value']!='') ? $(this).children('input')[0]['value'] : 1;
+		 $(this).children('input')[0]['value']='';
+
+	     $data='{{ csrf_token()}}&url=Carrito&campo='+$(this).data("remoto")+'&descripcion='+$(this).data("extra");
+	     $data+='&cantidad='+$cantidad;
+
 	     $.get('CarritoAgregarItem', $data, function(subpage){
 	     		   $('#right_wind').empty(); 
 	               $('#right_wind').append(subpage);
@@ -196,7 +213,7 @@ function insertaProducto($subpage, $cod, $descuento)
 	       console.log('Error en carga de Datos');
 	  	});  
 
-	});  
+});  
 
 function len(arr) {
   var count = -1;

@@ -65,11 +65,14 @@ class KaizenController extends Controller
      public function GuardaRegistro(Request $request) 
     {   
         $registro=$this->ValidarProducto($request);
+        $database=$this->index();
+        $newPost = $database->getReference('productos/'.$request->codigo_producto)
+        ->update($registro);
         //$atm=$this->GeneraModeloPersona($request);
         
         //$database=$this->index();
         //$newPost = $database->getReference('Persona')->push($atm);
-        return $registro;
+        return $newPost;
     }
 
     public function ValidarProducto(Request $request)
@@ -85,7 +88,7 @@ class KaizenController extends Controller
                             "precios"=> $request->precios
                           ];
 
-         return $request;         
+         return $registro;         
 
     }
 
@@ -122,7 +125,7 @@ class KaizenController extends Controller
         return [$ListProducto ,$ListDescuento];
      }
 
-    public function xVista(Request $request){    
+    public function yxVista(Request $request){    
             $view = View::make($request->url);
             
             if($request->ajax()){
@@ -153,7 +156,7 @@ class KaizenController extends Controller
             $ProdExtr=explode ( '<*>' ,$ext , 10 );
              
             $Estructura['codigo']=$ProdData[0];                                             
-            $Estructura['codigo_fabricante']=$ProdData[1];
+            $Estructura['fabricante']=$ProdData[1];
             $Estructura['precio']=$ProdData[2];
             $Estructura['cantidad']=0;
             $Estructura['descripcion']=$ProdData[3];
@@ -161,6 +164,19 @@ class KaizenController extends Controller
             $Estructura['modelo']=$ext;  
            return $Estructura;
         }
+
+    /* Panel de Administracion */
+
+    public function listadoProductos(Request $request)
+    {
+        $request->referencia='productos';
+        $ListProducto=$this->DevuelveBase($request);
+        return view('administracion.productos')->with('producto',$ListProducto);
+    }
+
+
+
+    /* Operaciones Carrito */ 
 
     public function CarritoAgregarItem(Request $request)
     {   $Vista=$this->Vista($request);
@@ -171,10 +187,12 @@ class KaizenController extends Controller
 
         $TmpCon = $_SESSION['MyCarrito'];
 
-        if (isset($TmpCon[$Vista->info['codigo']])) {$TmpCon[$Vista->info['codigo']]['cantidad']+=1;}
+        if (isset($TmpCon[$Vista->info['codigo']])){
+                        $TmpCon[$Vista->info['codigo']]['cantidad']+=$request->cantidad;
+                 }
             else { 
                    $TmpCon[$Vista->info['codigo']]=$Vista->info;
-                   $TmpCon[$Vista->info['codigo']]['cantidad']=1;
+                   $TmpCon[$Vista->info['codigo']]['cantidad']=$request->cantidad;
                  }
         //$tmn=count($TmpCon);
         //Session::put('MyCarrito', $TmpCon);

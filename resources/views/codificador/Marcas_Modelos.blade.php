@@ -8,7 +8,8 @@ ul, #myUL {
         padding: 0;
       }
 
-.xNmodel { color: black; }
+.xModelo { margin: -24px;}
+.xNmodel { color: black;}
 .xNmodel :hover { color: white;
                   background: black; 
                 }
@@ -91,34 +92,20 @@ ul, #myUL {
           display: none;
         }
 </style>
+
 <!DOCTYPE html>
 <html>
 <head>
   <title></title>
+  <link rel="stylesheet" href="{{'css/ToolTip.css'}}">
 </head>
 <body>
+    <form class="form-grup" id="formBuscarModelo">
+      @csrf
+      
+      <input type="text" name="busqueda" style="width: 100%; margin-bottom: 5%;" placeholder="Filtrar modelos" onkeyup="NuevaLista(this.value, 'ListaFabricante')">    
+  </form>
   <ol id="myUL" class="lista">
-    <!--
-    <li><span class="caret">Beverages</span>
-      <ul class="nested">
-        <li>Water</li>
-        <li>Coffee</li>
-        <li><span class="caret">Tea</span>
-          <ul class="nested">
-            <li>Black Tea</li>
-            <li>White Tea</li>
-            <li><span class="caret">Green Tea</span>
-              <ul class="nested">
-                <li>Sencha</li>
-                <li>Gyokuro</li>
-                <li>Matcha</li>
-                <li>Pi Lo Chun</li>
-              </ul>
-            </li>
-          </ul>
-        </li>  
-      </ul>
-    </li>-->
   </ol>
 </body>
 </html>
@@ -185,8 +172,20 @@ function LoadDataList() {
       
       for (const prop in $submenu)
           {
+            var $burbuja="";
+            var $año="";
           //   $element=$element+"<li id='mdl"+prop+"'><a  href='javascript:FiltrarModelo(\""+$id+prop+"\");' id='"+prop+"' class='dmrc"+$id+"'>"+$submenu[prop]['nombre']+"</a></li>" ;
-          $element=$element+"<li id='mdl"+prop+"'><a href='#' id='"+prop+"' class='dmrc"+$id+" xModelo'>"+$submenu[prop]['nombre']+"</a></li>" ;
+          $modName="<b style='color: gray'>- "+$submenu[prop]['nombre']+"</b>";
+          if (typeof $submenu[prop]['motor'] != "undefined") { $modName+=" "+$submenu[prop]['motor']}
+          if (typeof $submenu[prop]['cilindraje'] != "undefined") { $modName+=" "+$submenu[prop]['cilindraje']}  
+          if (typeof $submenu[prop]['inicio'] != "undefined") { $año+=$submenu[prop]['inicio']}
+
+          if (typeof $submenu[prop]['final'] != "undefined") { $año+="-"+$submenu[prop]['final']}
+          if (typeof $submenu[prop]['info'] != "undefined") { $burbuja=$submenu[prop]['info']}
+             
+          if ($año!="") { $modName+=" ( "+$año+" )"; }
+
+          $element=$element+"<li id='mdl"+prop+"'><a href='#' id='"+prop+"' class='dmrc"+$id+" xModelo'><span tooltip='"+$burbuja+"'  >"+$modName+"</span></a></li>" ;
           }
 
       $element=$element+"</ul></li>";
