@@ -103,7 +103,7 @@ ul, #myUL {
     <form class="form-grup" id="formBuscarModelo">
       @csrf
       
-      <input type="text" name="busqueda" style="width: 100%; margin-bottom: 5%;" placeholder="Filtrar modelos" onkeyup="NuevaLista(this.value, 'ListaFabricante')">    
+      <input type="text" name="busqueda" style="width: 100%; margin-bottom: 5%;" placeholder="Filtrar modelos" onkeyup="filtraMarcaModelo(this.value)">    
   </form>
   <ol id="myUL" class="lista">
   </ol>
@@ -195,6 +195,37 @@ function LoadDataList() {
 
       var txt = document.getElementById($contenedor);
       txt.insertAdjacentHTML('beforeend', $element); 
+  }
+
+
+  function filtraMarcaModelo(texto)
+  {
+    $('body').on('click', '.rxcaret,.rcaret', function(){      
+    
+    if ($(this).hasClass("caret-down")||$(this).hasClass("xcaret")){   
+                                                                      let $campo='';
+                                                                      let $descr=''; 
+                                                                        
+                                                                      $('#'+$campo).val(($(this)[0].id).substring(3));
+                                                                      $('#'+$descr).text($(this)[0].innerText);
+                                                                    }
+
+
+
+   // if ($(this).hasClass("caretX-down")||$(this).hasClass("xcaretX")){
+   //   FiltrarCategoria($(this)['0']['id']);    }   
+ });
+
+    $('body').on('click', '.xModelo', function(){    
+      let $campo='';
+      let $descr=''; 
+                                                                        
+      console.log();
+       $('#'+$campo).val($(this).parent().parent().attr('id').substring(3)+$(this)['0']['id']);
+       $('#'+$descr).text($(this).parent().parent().siblings('.caret')[0]['innerText']+": "+$(this)[0]['innerText']);
+       //$('#'+$descr).text($(this)[0].innerText);    
+       $("[data-dismiss=modal]").trigger({ type: "click" }); /*Cierra ventana modal*/
+    });
   }
 
  

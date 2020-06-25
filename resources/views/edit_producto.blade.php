@@ -9,6 +9,7 @@
    padding-top: 4px;
    border-style: ridge;
    border-color: #ced4da;
+   margin-bottom: 2px;
   }
 
 .BrrCateg
@@ -29,7 +30,6 @@ label { font-weight: bold;
 
 </style>
 
- 
 
 <div id="Centro" style="font-size: 0.8em;">
 	
@@ -62,7 +62,6 @@ label { font-weight: bold;
               </div>
  
 
-
               <div class="form-group row NatJur" style="margin-bottom: 3px; ">
                   <label class="col-lg-2 col-form-label text-right" for="codigo_fabricante">Fabricante:</label>
                   <div class="col-sm-3 input-group" >
@@ -78,10 +77,9 @@ label { font-weight: bold;
              <div class="form-group row NatJur" style="margin-bottom: 3px; ">
                   <label class="col-lg-2 col-form-label text-right" for="precio_Venta">Medidas:</label>
                   <div class="col-sm-3 input-group">
-                    <input type="text" class="form-control form-control-sm" id="Medidas" placeholder="">
+                    <input type="text" class="form-control form-control-sm" id="xMedidas" placeholder="">
                     <div class="input-group-btn input-group-append">
-                      <button type="button" class="btn btn-success btn-sm" onclick="
-                      agrElemento('', '','medidas' ,'MedidasGrupo');"><i class="fa fa-plus"></i></button>
+                      <button type="button" class="btn btn-success btn-sm" onclick="NuevaMedida()"><i class="fa fa-plus"></i></button>
                     </div>
                   </div>
 
@@ -104,6 +102,7 @@ label { font-weight: bold;
               </div>
 
             </div>  
+
 
             <div id="precios" class="grupoDT">
              <div class="form-group row NatJur" style="margin-bottom: 3px; ">
@@ -219,11 +218,14 @@ function ubica(prop,subpage)
 {
    switch(prop) 
    {
+      case 'codigos_adicionales':
+                   for (const ind in subpage) { agrDescripcion('codigo','codigo_producto',subpage[ind]);}
+                   break;
       case 'categoria': 
                     for (const ind in subpage) { NuevaCategoria(subpage[ind],''); }
             break;
       case 'medidas':
-                    for (const ind in subpage) {agrElemento(subpage[ind], '','medidas' ,'MedidaGrupo');} 
+                    for (const ind in subpage){agrElemento(subpage[ind],'','medidas','MedidasGrupo');} 
                     break;
       case 'precios':
                     for (const ind in subpage) {agrElemento(subpage[ind], '','precios' ,'PrecioGrupo');} 
@@ -318,6 +320,24 @@ function NuevoPrecio()
   $('#precio_Venta').val('');
 }
 
+function NuevaMedida()
+{
+    $des=$('#xMedidas').val();
+    if ($des.trim().length!=0)  
+    {    
+      agrElemento($('#xMedidas').val(), '','medidas' ,'MedidasGrupo')
+    }
+
+      $datos=$('.MedidasGrupo');
+      $('#medidas').children(".xGrupos").remove();
+      for (var i = 0; i < $datos.length; i++) {
+         agrElemento($datos[i]['value'], '','medidas' ,'MedidasGrupo');
+      }
+
+    $('#xMedidas').val('');
+}
+
+
 $('body').on('click', '.BrrCateg', function()  //Boton que borra categoria
 {
     $(this).parent().parent().remove();  
@@ -345,7 +365,7 @@ $('body').on('change', '#foto', function()  //Boton que borra categoria
         agrFoto($(this).val());}
 });
 
-function XXXagrDescripcion(valor, campo, clase,grupo)
+function XXXXagrDescripcion(valor, campo, clase,grupo)
 {
   if (($('.descripElm').length==0)&&($('#Xdescripcion').val()=='')) {$('#Xdescripcion').val(valor); return;}
   boton="<div class='col-sm-1'><button class='btn btn-outline-danger BrrCateg btn-sm'><i class='fa fa-trash'></i></button></div>";
@@ -371,10 +391,20 @@ function agrDescripcion(campo,referencia ,valor)
 function agrElemento($cod, $des, $grupo,$clase)
 {
 
+   $Secue=Secuencia($clase); 
    boton="<button class='btn btn-outline-danger BrrCateg btn-sm'><i class='fa fa-trash'></i></button>";
-     var NewCateg="<div class='form-group row xGrupos' style='margin-bottom: 3px; '><div class='col-sm-2 text-right my-auto'>"+boton+"</div><div class='col-sm-3 input-group'><input type='text' class='form-control form-control-sm "+$clase+"' value='"+$cod+"' name='"+$grupo+"[]'></div><label class='col-lg-5 col-form-label text-left' id='CatDesc"+$cod+"'>"+$des+"</label></div>";
+     var NewCateg="<div class='form-group row xGrupos' style='margin-bottom: 3px; '><div class='col-sm-2 text-right my-auto'>"+boton+"</div><div class='col-sm-3 input-group'>"+$Secue+" <input type='text' class='form-control form-control-sm "+$clase+"' value='"+$cod+"' name='"+$grupo+"[]'></div><label class='col-lg-5 col-form-label text-left' id='CatDesc"+$cod+"'>"+$des+"</label></div>";
 
      $('#'+$grupo).append(NewCateg);
+}
+
+function Secuencia($clase)
+{
+  if ($clase=='MedidasGrupo') {
+      ind=$('.'+$clase).length;
+      return "<div style='margin-right:4px; font-size: 1.8em;'>"+String.fromCharCode(65+ind)+":</div>";
+    }
+    return '';
 }
 
 function agrFoto($camino)

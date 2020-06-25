@@ -7,7 +7,7 @@
     <title>MAZ Partes</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
-
+@INCLUDE('autenticacion.Funciones_login')
 <style>
 
 
@@ -40,7 +40,8 @@
 </style>
 
 <body style="background: #f3f3f3;">  
-
+    @INCLUDE('barra')
+    @INCLUDE('modal')
     <div class="row" id="work">
       
       <div class="col-md-3 left_wind" id="left_wind">

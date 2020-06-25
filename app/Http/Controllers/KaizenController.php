@@ -9,6 +9,7 @@ use Kreait\Firebase\Factory;
 use Kreait\Firebase\ServiceAccount;
 use Kreait\Firebase\Database;
 use Kreait\Firebase\Firestore;
+use Kreait\Firebase\Auth;
 use View;
 
 class KaizenController extends Controller
@@ -27,6 +28,7 @@ class KaizenController extends Controller
         ->withServiceAccount($serviceAccount)   
         ->withDatabaseUri('https://maz-partes.firebaseio.com/')
         ->create();
+        $auth = $firebase->createAuth();
         return $firebase->getDatabase();
     }
 
@@ -78,15 +80,17 @@ class KaizenController extends Controller
     public function ValidarProducto(Request $request)
     {
 
-        $registro=[        "categoria"=> $request->categoria,
-                            "codigo_adicional"=> $request->codigo_adicional,
-                            "codigo_catalogo"=> $request->codigo_catalogo,
-                            "codigo_fabricante"=> $request->codigo_fabricante,
-                            "descripcion"=> $request->descripcion,
-                            "fotos"=> $request->fotos,
-                            "modelo"=> $request->modelo,
-                            "precios"=> $request->precios
-                          ];
+        $registro=[
+          "categoria"=> $request->categoria,
+          "codigos_adicionales"=> isset($request->codigo) ?$request->codigo:null,
+          "codigo_catalogo"=> $request->codigo_catalogo,
+          "codigo_fabricante"=> $request->codigo_fabricante,
+          "descripcion"=> $request->descripcion,
+          "medidas"=> $request->medidas,
+          "fotos"=> $request->fotos,
+          "modelo"=> $request->modelo,
+          "precios"=> $request->precios                  
+        ];
 
          return $registro;         
 

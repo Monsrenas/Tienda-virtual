@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('login', function () {
+    return view('autenticacion.Funciones_login');
+});
+
+
 Route::get('ListaImagenes','KaizenController@getImageRelativePathsWfilenames');
 Route::get('firebase','KaizenController@index');
 

@@ -1,5 +1,5 @@
-@extends('welcome')
 
+@extends('welcome')
 @section('lista_productos')
 
 <link rel="stylesheet" href="{{'css/listProducto.css'}}">
@@ -8,7 +8,7 @@
 
 </div>
 
-@INCLUDE('modal')
+
 @INCLUDE('reloj') 
 
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
@@ -17,7 +17,7 @@
 for (var i = 1; i < 12; i++) {
 	insertaProducto('Pieza '+i,'19.99','Lugar donde se muestra la descripcion del producto');
 }*/
-  cargarListaProductos('');
+ // cargarListaProductos('');
   
   function cargarListaProductos(condiciones)
   {
@@ -177,11 +177,7 @@ function insertaProducto($subpage, $cod, $descuento)
   var $paq=$cod+"<*>"+$fabricante+"<*>"+$precioDesc+"<*>"+$descri+$gale;
   var $ext=$mods;  // En esta variable, ademas de modelos, va codigo de fabricante y otros datos a mostrar
 
-   	  
-  
-  
-
-
+ 
   $Marco="<div class='marco_producto'> "+$EtiquetaDescuento+" "+$EtiquetasPrecio+"<a class='btn btn-sm '  data-toggle='modal' data-target='#myModal' data-remoto='"+$paq+"' data-extra='"+$ext+"'><div class='marco_foto'><img class='foto' id='imagen' src='"+$foto+"' alt='Muestra partes'/></div><div class='descripcion'><p style='color: black; font-weight: bold; margin-bottom: -1px;'>"+$descri+"</p><p>"+$fabricante+"</p> </div></a><button class='boton_agregar btn btn-sm fa fa-shopping-cart'  data-toggle='carAdd'  data-remoto='"+$paq+"' data-extra='"+$ext+"' ><input class='cantCar' type'text'  placeholder='cantidad'> <div class='TextAgr'>Agregar</div></button> </div>";
 
       var txt = document.getElementById('Centro');
