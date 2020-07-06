@@ -9,7 +9,6 @@ use Kreait\Firebase\Factory;
 use Kreait\Firebase\ServiceAccount;
 use Kreait\Firebase\Database;
 use Kreait\Firebase\Firestore;
-use Kreait\Firebase\Auth;
 use View;
 
 class KaizenController extends Controller
@@ -20,6 +19,9 @@ class KaizenController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    protected $variable;
+
+
     public function index()
     {	
 
@@ -28,7 +30,6 @@ class KaizenController extends Controller
         ->withServiceAccount($serviceAccount)   
         ->withDatabaseUri('https://maz-partes.firebaseio.com/')
         ->create();
-        $auth = $firebase->createAuth();
         return $firebase->getDatabase();
     }
 
@@ -70,6 +71,9 @@ class KaizenController extends Controller
         $database=$this->index();
         $newPost = $database->getReference('productos/'.$request->codigo_producto)
         ->update($registro);
+
+         //$newPost = $database->getReference('productos/'.$request->codigo_producto)
+        //->update($registro);
         //$atm=$this->GeneraModeloPersona($request);
         
         //$database=$this->index();
@@ -79,7 +83,6 @@ class KaizenController extends Controller
 
     public function ValidarProducto(Request $request)
     {
-
         $registro=[
           "categoria"=> $request->categoria,
           "codigos_adicionales"=> isset($request->codigo) ?$request->codigo:null,
@@ -93,7 +96,6 @@ class KaizenController extends Controller
         ];
 
          return $registro;         
-
     }
 
     public function Actualizar() //DESUSO
@@ -114,20 +116,132 @@ class KaizenController extends Controller
         {  
            $database=$this->index();
            $reference = $database->getReference($request->referencia);
-           $Snapshot=$reference->getSnapshot();
+           $Snapshot=$reference->orderByKey()->limitToFirst(200)->getSnapshot();
            $value = $Snapshot->getValue();
            //$value = $reference->getValue();
 
           return $value;
         }
 
+
     public function Info_Producto(Request $request)
-     {
+     {  
         $ListProducto=$this->DevuelveBase($request);
         $request->referencia='descuentos';
         $ListDescuento=$this->DevuelveBase($request);
         return [$ListProducto ,$ListDescuento];
      }
+
+//Filtro
+    public function pagina(Request $request)
+    {
+        $request->referencia='descuentos';
+        $ListDescuento=$this->DevuelveBase($request);
+
+        $request->referencia='productos';
+        $ListProducto=$this->DevuelveBase($request);
+        $filtrado=[];
+
+        foreach ($ListProducto as $key => $value) { 
+            $value['codigo']=$key;
+        
+             
+            if ($this->enFiltro($request, $value)) { 
+                                                    $value['descuento']=$this->descuento($value, $ListDescuento);
+                                                    
+                                                    $filtrado[]=$value;
+        }                                          }
+        return  $filtrado;                             
+    }
+
+    public function enFiltro(Request $request, $producto)
+    {
+        $datos=$request->all(); 
+        $condicion=[];
+        $bndr=0;
+        $modelo= $producto['modelo'] ?? [];
+        $categoria= $producto['categoria'] ?? [];
+        $Codigos=$producto['codigos_adicionales'] ?? '';
+        $fabricante=$producto['codigo_fabricante'] ?? '';
+
+        foreach ($datos as $key => $value) {
+            $condicion[$key]=explode(',', $value);
+        }
+
+        $cmpld=count($condicion);
+
+       
+
+        if (isset($condicion['palabra']))
+        {    
+            
+            $palabras=(count($condicion['palabra'])>1) ? count($condicion['palabra'])-1:0;
+            $cmpld=$cmpld+$palabras;
+            foreach ($producto['descripcion'] as $key => $descripcion) {
+                 foreach ($condicion['palabra'] as $ind => $valor) { echo strtoupper($descripcion)."-".strtoupper($valor) ;
+                    if (strpos( strtoupper($descripcion), strtoupper($valor) )>-1)  { $bndr=$bndr+1; echo $bndr;}
+
+                   if ($producto['codigo']==$valor) { $bndr=$bndr+1; }
+
+                   /*  foreach ($Codigos as $inco => $xCodigo) {
+                        if ($xCodigo==$valor) { $bndr=$bndr+1; }
+                    }*/
+                 }     
+            }      
+        }
+
+        if (isset($condicion['marca']))
+        {  
+            foreach ($modelo as $key => $descripcion) {
+                 foreach ($condicion['marca'] as $ind => $valor) { 
+                    if (substr( $descripcion,0,3)==$valor)  { 
+                        //echo $producto['codigo'].": ".substr($descripcion,0,3)."  ".$valor."//";
+                         $bndr=$bndr+1; }
+                 }     
+            }      
+        }        
+
+
+
+        if (isset($condicion['modelo']))
+        { 
+            foreach ($modelo as $key => $descripcion) {
+                 foreach ($condicion['modelo'] as $ind => $valor) {
+                    if (strpos( $descripcion, $valor )!==FALSE)  { $bndr=$bndr+1;}
+                 }     
+            }      
+        }        
+        
+        if (isset($condicion['categoria']))
+        { 
+            foreach ($categoria as $key => $descripcion) {
+               for ($i=1; $i <((strlen($descripcion)+1)/3) ; $i++) {
+                    $Subcategoria=substr($descripcion, 0, $i*3);
+                    
+                    foreach ($condicion['categoria'] as $ind => $valor) {     
+                         
+                         if ($valor==$Subcategoria)  { $bndr=$bndr+1;}
+                    }       
+                }      
+            }      
+        }            
+
+        if ((isset($condicion['fabricante']))and(strpos( $fabricante, $condicion['fabricante'][0] )!==FALSE))
+        { 
+            $bndr=$bndr+1;      
+        }    
+
+        if ($bndr>=$cmpld) { return true; } 
+
+        return false;
+    }                                                           //Final de la Funcion enFiltro
+
+
+
+    public function descuento()
+    {
+        return 10;
+    }
 
     public function yxVista(Request $request){    
             $view = View::make($request->url);
@@ -177,8 +291,6 @@ class KaizenController extends Controller
         $ListProducto=$this->DevuelveBase($request);
         return view('administracion.productos')->with('producto',$ListProducto);
     }
-
-
 
     /* Operaciones Carrito */ 
 

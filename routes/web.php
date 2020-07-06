@@ -17,6 +17,11 @@ Route::get('login', function () {
     return view('autenticacion.Funciones_login');
 });
 
+Route::get('pagina','KaizenController@pagina');
+
+
+
+
 
 Route::get('ListaImagenes','KaizenController@getImageRelativePathsWfilenames');
 Route::get('firebase','KaizenController@index');

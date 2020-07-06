@@ -40,7 +40,7 @@
           Nomencladores
         </a>
         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <li><a class="dropdown-item" href="{{url('/productos')}}">Productos</a></li>
+          <li><a class="dropdown-item" href="">Productos</a></li>
           <li><a class="dropdown-item" href="#">Clasificadores</a></li>
 
         </ul>

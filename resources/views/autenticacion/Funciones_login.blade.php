@@ -99,7 +99,7 @@ function acceso(){
                           });
   }
 
-  function enviar(){
+  function crear(){
     var email = document.getElementById('email').value;
     var pass = document.getElementById('pass').value;
 
@@ -111,6 +111,7 @@ function acceso(){
     }).then(function(){
       // VERIFICAMOS EL CORREO
       verificar();
+      
     });
   }
 

@@ -112,9 +112,9 @@ $(function () {
 
       var $resul=[];
       $resul['fabricante']=[]; 
-      $resul['modelo']=nombre;     
+         
       
-       $resul['fabricante'].push(id);
+       $resul['fabricante']=id;
       
        cargarListaProductos($resul);
 
@@ -126,8 +126,8 @@ $(function () {
   var $resul=[];
   $resul['categoria']=[];
   $resul['categoria'][0]=id.substring(3);
-  $resul['palabra']=[];
-  $resul['palabra'].push('monsrenas');
+  //$resul['palabra']=[];
+  //$resul['palabra'].push('monsrenas');
   
   cargarListaProductos($resul);
 }

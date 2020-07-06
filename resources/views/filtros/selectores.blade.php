@@ -61,18 +61,18 @@
     function BuscaCodigoModelo(ocurr)
       {
         var $resul=[];
+        var $retorno=[];
             $resul['marca']=[];
             $resul['modelo']=[];  
         $listMarca=$('.caret');
-        //console.log($listMarca['0'].innerText );
-        //console.log($listMarca);
+        
         for (var i = 0; i < $listMarca.length; i++) {
                   $nMarca=($listMarca[i].innerText);
                   $nCodig=($listMarca[i].id);
                   for (var y = 0; y < ocurr.length; y++) {
                     $ind=($nMarca).toUpperCase().indexOf(ocurr[y].toUpperCase());
                     if ($ind>-1) {     
-                                       //console.log($nMarca+" "+$nCodig); 
+                                       ocurr.splice( y, 1 );
                                        $resul['marca'].push($nCodig);     
                                  }
 
@@ -84,25 +84,29 @@
                       $nModCod=$listModelo[z].id;
                       for (var y = 0; y < ocurr.length; y++) {
                                             $ind=($nModelo).toUpperCase().indexOf(ocurr[y].toUpperCase());
-                                              if ($ind>-1) { //console.log(" - "+$nModelo+" "+$nCodig+$nModCod); 
+                                              if ($ind>-1) {  
+                                                                 ocurr.splice( y, 1 ); 
                                                                  $resul['modelo'].push($nCodig+$nModCod);      
                                                            }
 
                                           }
                     }  
                 }      
-          return $resul;
+
+         $retorno.push($resul);
+         $retorno.push(ocurr);
+
+         return   $retorno;
       }
       
 
     function BuscaCodigoCategoria(ocurr)
     {
         var $resul=[];
+        var $retorno=[];
         $resul['categoria']=[];
 
         $listCategoria=$('.caretX,.xcaretX');
-        //console.log($listMarca['0'].innerText );
-        //console.log($listMarca);
 
         for (var i = 0; i < $listCategoria.length; i++) {
             $nCateg=($listCategoria[i].innerText);
@@ -112,23 +116,60 @@
                     $ind=($nCateg).toUpperCase().indexOf(ocurr[y].toUpperCase());
 
                     if ($ind>-1) {      
+                                      ocurr[y]='';    
                                       $resul=$nCodig.substring(3);     
                                  }
              }
         } 
 
-         return $resul;  
+         $retorno.push($resul);
+         $retorno.push(depura(ocurr));
+
+         return   $retorno;
     }
 
     function Filtrar(frase)
     {
-      var ocurr=(frase).split(' '); 
-      $resul=BuscaCodigoModelo(ocurr);
-      $categ=BuscaCodigoCategoria(ocurr);
+       
+      ocurr=depura(frase);
+
+      $tmp=BuscaCodigoModelo(ocurr);
+      $resul=$tmp[0];
+      ocurr=depura($tmp[1]);
+
+      $tmp=BuscaCodigoCategoria(ocurr);
+      $categ=$tmp[0];
+      ocurr=depura($tmp[1]);
+
       if ($categ.length>0) {$resul['categoria']=$categ;}
       $resul['palabra']=ocurr;
-      cargarListaProductos($resul);
+      $tmp=[];
+
+      for (const key in $resul) 
+                              {
+                                  if ($resul[key].length!=0) {
+                                                                $tmp[key]=$resul[key];
+                                                             }
+                              }
+
+      cargarListaProductos($tmp);
     }
+
+    function depura(ocurr)
+    {
+      if (typeof ocurr=== 'string') {ocurr=(ocurr).split(' ');}
+      var $tmp=[];
+
+      for (const key in ocurr) 
+      {   
+          if (ocurr[key].trim()!='') {
+                                          $tmp.push((ocurr[key].trim()).toString()); 
+                                        }
+      }
+
+      return $tmp;
+    }
+
 
     $('#busqueda').keypress(function(event){
                   var keycode = (event.keyCode ? event.keyCode : event.which);

@@ -17,9 +17,71 @@
 for (var i = 1; i < 12; i++) {
 	insertaProducto('Pieza '+i,'19.99','Lugar donde se muestra la descripcion del producto');
 }*/
- // cargarListaProductos('');
+ cargarListaProductos('');
   
-  function cargarListaProductos(condiciones)
+
+function XXXcargarListaProductos(condiciones)
+{
+
+  	var elemento = {};
+
+	Object.keys(condiciones).forEach( (element,i) => {
+	                                           elemento[element]=(JSON.stringify(condiciones[element]));
+	                                          });
+
+  	condiciones= elemento; 
+
+$.ajax({                 
+			url : '/pagina',                 
+			data:{                     
+					condiciones:condiciones                 
+		         },    
+			headers: {
+				       'X-CSRF-TOKEN': '{{ csrf_token()}}' //$('meta[name="csrf-token"]').attr('content')
+				      },                
+		    type : 'POST',                 
+		    dataType : 'json',                 
+		    success : function(data) {                     
+		    						    alert(  JSON.stringify(data) );                 
+		    					      },                 
+		    error : function(jqXHR, status, error) {                                      
+		                                           },                 
+		    complete : function(jqXHR, status) {                                      
+		                                        }         
+	  });
+}
+
+
+function cargarListaProductos(condiciones)
+  {		
+  	 console.log(condiciones);
+  	 var $dataCond='';
+	 for (const prop in condiciones){
+	 	  if ((condiciones[prop]).length>0){	
+	 	  		  $dataCond+='&'+prop+'='+condiciones[prop];
+	 	  }
+
+	 }
+
+     $data=$dataCond;	
+     $('#Centro').empty();
+     $('#timer').modal('show');
+
+     $.get('pagina', $data, function(subpage){ 
+        var $element='';  var $elemenX='';
+        console.log(subpage);
+        for (const prop in subpage)
+            {    
+ 			   insertaProducto(subpage[prop]);   
+            }      
+      $('#timer').modal('hide');
+    }).fail(function() {
+       console.log('Error en carga de Datos');
+  });
+
+  }
+
+  function xxxcargarListaProductos(condiciones)
   {
      $data='{{ csrf_token()}}&referencia=productos';	
      $('#Centro').empty();
@@ -140,8 +202,10 @@ function descuentos(subpage, prop)
 	return $valor;
 }
 
-function insertaProducto($subpage, $cod, $descuento)
+function insertaProducto($subpage)
 { 	
+  var $cod=$subpage['codigo'];
+  var $descuento=$subpage['descuento'];
   var desIndice=(($subpage['descripcion']) ? Object.getOwnPropertyNames($subpage['descripcion']) : "");
   var preIndice=(($subpage['precios']) ? Object.getOwnPropertyNames($subpage['precios']) : "");
   var fotIndice=(($subpage['fotos']) ? Object.getOwnPropertyNames($subpage['fotos']) : "");	
@@ -154,8 +218,10 @@ function insertaProducto($subpage, $cod, $descuento)
   var $fabric=(($subpage['codigo_fabricante']) ? $subpage['codigo_fabricante'] : "");
   var $gale='';
   var $mods='';
+  $fabricante='';
   var $fabricante=($('#'+$fabric+'.guardados').length>0) ? 'Fabricante: '+$('#'+$fabric+'.guardados')[0]['innerText'] :'';
-  var $EtiquetasPrecio="<div class='precViej'> </div><div class='precio'>"+$precio+"</div>";
+
+  var $EtiquetasPrecio="<div class='precViej'> </div><div class='precio'>$"+$precio+"</div>";
   for (const prop in $subpage['fotos'])
             {  
  				$gale=$gale+"<*>"+$subpage['fotos'][prop];     
@@ -170,14 +236,12 @@ function insertaProducto($subpage, $cod, $descuento)
   var $precioDesc=$precio;
   if ($descuento>0) {   $EtiquetaDescuento="<div class='EtiDescuento'>-"+$descuento+" %</div>";    
   						$precioDesc=($precio-(($precio*$descuento)/100)).toFixed(2);
-  						$EtiquetasPrecio="<div class='precViej'>"+$precio+"</div><div class='precio'>"+$precioDesc+"</div>";
+  						$EtiquetasPrecio="<div class='precViej'>$"+$precio+"</div><div class='precio'>$"+$precioDesc+"</div>";
   					  }
 
-  
   var $paq=$cod+"<*>"+$fabricante+"<*>"+$precioDesc+"<*>"+$descri+$gale;
   var $ext=$mods;  // En esta variable, ademas de modelos, va codigo de fabricante y otros datos a mostrar
 
- 
   $Marco="<div class='marco_producto'> "+$EtiquetaDescuento+" "+$EtiquetasPrecio+"<a class='btn btn-sm '  data-toggle='modal' data-target='#myModal' data-remoto='"+$paq+"' data-extra='"+$ext+"'><div class='marco_foto'><img class='foto' id='imagen' src='"+$foto+"' alt='Muestra partes'/></div><div class='descripcion'><p style='color: black; font-weight: bold; margin-bottom: -1px;'>"+$descri+"</p><p>"+$fabricante+"</p> </div></a><button class='boton_agregar btn btn-sm fa fa-shopping-cart'  data-toggle='carAdd'  data-remoto='"+$paq+"' data-extra='"+$ext+"' ><input class='cantCar' type'text'  placeholder='cantidad'> <div class='TextAgr'>Agregar</div></button> </div>";
 
       var txt = document.getElementById('Centro');
@@ -208,7 +272,6 @@ $('body').on('click', 'button[data-toggle="carAdd"]', function(){
 	    }).fail(function() {
 	       console.log('Error en carga de Datos');
 	  	});  
-
 });  
 
 function len(arr) {

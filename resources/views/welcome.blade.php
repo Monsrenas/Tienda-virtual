@@ -4,6 +4,7 @@
 <html>
 <head>
     <meta name="csrf-token" content="{{ csrf_token() }}" /> 
+    
     <title>MAZ Partes</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
@@ -75,12 +76,10 @@
         <div class="modal-body" id="modal-body" style="max-height: 600px; overflow: auto;">
           Modal body..
         </div>
-        
         <!-- Modal footer -->
         <div class="modal-footer">
           <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-        </div>
-        
+        </div>     
       </div>
     </div>
   </div>
@@ -109,20 +108,19 @@
   $('.botonOp').click(function(){$('#qwerty').modal('show');});  
 </script>
 
-
-  <div class="modal" id="osmel">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <!-- Modal body -->
-        <div class="modal-body" id="modal-body">
-          Modal body..
-        </div>
-        
-        <!-- Modal footer -->
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-        </div>
-        
+<div class="modal" id="osmel">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Modal body -->
+      <div class="modal-body" id="modal-body">
+        Modal body..
       </div>
+      
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+      </div>
+      
     </div>
   </div>
+</div>
