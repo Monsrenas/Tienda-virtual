@@ -1,4 +1,4 @@
-@extends('menu')
+@extends('panel.menu')
 
 
 @section('operaciones')

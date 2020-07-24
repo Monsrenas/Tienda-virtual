@@ -20,7 +20,7 @@
 
                         <div class="form-group">
                             <label for="MIcorreo">Correo</label>
-                            <input type="email" id="MIcorreo" name="correo"
+                            <input type="email" id="MIcorreo" name="correMpociot\Firebaseo"
                                 class="form-control" type="email"
                                 placeholder="Correo electrónico">
                         </div>

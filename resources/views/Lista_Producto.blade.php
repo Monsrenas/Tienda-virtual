@@ -17,41 +17,8 @@
 for (var i = 1; i < 12; i++) {
 	insertaProducto('Pieza '+i,'19.99','Lugar donde se muestra la descripcion del producto');
 }*/
- cargarListaProductos('');
+cargarListaProductos('');
   
-
-function XXXcargarListaProductos(condiciones)
-{
-
-  	var elemento = {};
-
-	Object.keys(condiciones).forEach( (element,i) => {
-	                                           elemento[element]=(JSON.stringify(condiciones[element]));
-	                                          });
-
-  	condiciones= elemento; 
-
-$.ajax({                 
-			url : '/pagina',                 
-			data:{                     
-					condiciones:condiciones                 
-		         },    
-			headers: {
-				       'X-CSRF-TOKEN': '{{ csrf_token()}}' //$('meta[name="csrf-token"]').attr('content')
-				      },                
-		    type : 'POST',                 
-		    dataType : 'json',                 
-		    success : function(data) {                     
-		    						    alert(  JSON.stringify(data) );                 
-		    					      },                 
-		    error : function(jqXHR, status, error) {                                      
-		                                           },                 
-		    complete : function(jqXHR, status) {                                      
-		                                        }         
-	  });
-}
-
-
 function cargarListaProductos(condiciones)
   {		
   	 console.log(condiciones);
@@ -60,7 +27,6 @@ function cargarListaProductos(condiciones)
 	 	  if ((condiciones[prop]).length>0){	
 	 	  		  $dataCond+='&'+prop+'='+condiciones[prop];
 	 	  }
-
 	 }
 
      $data=$dataCond;	
@@ -80,97 +46,6 @@ function cargarListaProductos(condiciones)
   });
 
   }
-
-  function xxxcargarListaProductos(condiciones)
-  {
-     $data='{{ csrf_token()}}&referencia=productos';	
-     $('#Centro').empty();
-     $('#timer').modal('show');
-
-     $.get('Info_Producto', $data, function(subpage){ 
-        var $element='';  var $elemenX='';
-         
-        for (const prop in subpage[0])
-            {  
- 				if (enFiltro(subpage[0][prop], condiciones)) 
- 					  {  
- 					  	insertaProducto(subpage[0][prop],prop, descuentos(subpage, prop)); 
- 					  }     
-            }      
-      $('#timer').modal('hide');
-    }).fail(function() {
-       console.log('Error en carga de Datos');
-  });
-
-  }
-
-function enFiltro(subpage, condiciones)
-{	
-	var modelos=subpage['modelo'];
-	var categoria=subpage['categoria'];
-	
-	var descripcion=subpage['descripcion'];
- 	var flag=0;   //Deben cumplirse un numero determinado de condiciones para que se muestre la pieza
- 	var indic=0;
-
-  
-
-	if (typeof condiciones['palabra'] != "undefined")  //1ra Que alguna palabra coincida con la descripcion
-	{ 
-		  for (var i = 0; i < condiciones['palabra'].length; i++) 
-	          {	   
-					for (const prop in descripcion) 
-					{ 
-						  	 $ind=(descripcion[prop]).toUpperCase().indexOf(condiciones['palabra'][i].toUpperCase());
-					  	 if ($ind>-1) { flag++; }
-					} 	 
-			  }	 
-		  var indic=i;	                                           
-	}  else { indic=len(condiciones);}
-
-
-	if (typeof condiciones['modelo'] != "undefined")
-	{   
-       for (const prop in modelos) 
-			{ 
-			  for (var i = 0; i < condiciones['modelo'].length; i++) 
-	              {   
-				  	 if (modelos[prop]==condiciones['modelo'][i])     { flag++; }
-				  }				
-			 }                                               
-	}
-
-	if (typeof condiciones['marca'] != "undefined")
-	{  si=0;
-       for (const prop in modelos) 
-			{ 
-			  for (var i = 0; i < condiciones['marca'].length; i++) 
-	              {   
-				  	 if (modelos[prop].substring(0,3)==condiciones['marca'][i])    {  si=1; }
-				  }				
-			 }
-		flag +=si;		                                        
-	}
-
-	if (typeof condiciones['categoria'] != "undefined")
-	{ 
-       for (const prop in categoria) 
-			{ 
-				  	 if (categoria[prop]==condiciones['categoria'])      {  flag++;  }			
-			}                  
-		                      
-	}
-
-	if (typeof condiciones['fabricante'] != "undefined")
-	{ 
-     	console.log(indic);
-	   if (subpage['codigo_fabricante']==condiciones['fabricante'])      {  flag++;  }				                  
-		                      
-	}	
-	 
-	if (flag>=indic){return true} else {return false;}	
-
-}  
 
 function descuentos(subpage, prop)
 {	var $valor=0;
@@ -192,13 +67,11 @@ function descuentos(subpage, prop)
 					}
 		}
 	 
-
-		if (enFiltro(subpage[0][prop] ,$condiciones)) {
-			 
-			if (len($condiciones)>0)	{$valor+=subpage[1][indice]['valor'];}}
-
+		if (enFiltro(subpage[0][prop] ,$condiciones)) 
+                                                {
+			                                             if (len($condiciones)>0)	{ $valor+=subpage[1][indice]['valor']; }
+                                                }
 	}
-
 	return $valor;
 }
 
@@ -220,7 +93,7 @@ function insertaProducto($subpage)
   var $mods='';
   $fabricante='';
   var $fabricante=($('#'+$fabric+'.guardados').length>0) ? 'Fabricante: '+$('#'+$fabric+'.guardados')[0]['innerText'] :'';
-
+  var $EtiCod='Código: '+$cod;
   var $EtiquetasPrecio="<div class='precViej'> </div><div class='precio'>$"+$precio+"</div>";
   for (const prop in $subpage['fotos'])
             {  
@@ -242,7 +115,7 @@ function insertaProducto($subpage)
   var $paq=$cod+"<*>"+$fabricante+"<*>"+$precioDesc+"<*>"+$descri+$gale;
   var $ext=$mods;  // En esta variable, ademas de modelos, va codigo de fabricante y otros datos a mostrar
 
-  $Marco="<div class='marco_producto'> "+$EtiquetaDescuento+" "+$EtiquetasPrecio+"<a class='btn btn-sm '  data-toggle='modal' data-target='#myModal' data-remoto='"+$paq+"' data-extra='"+$ext+"'><div class='marco_foto'><img class='foto' id='imagen' src='"+$foto+"' alt='Muestra partes'/></div><div class='descripcion'><p style='color: black; font-weight: bold; margin-bottom: -1px;'>"+$descri+"</p><p>"+$fabricante+"</p> </div></a><button class='boton_agregar btn btn-sm fa fa-shopping-cart'  data-toggle='carAdd'  data-remoto='"+$paq+"' data-extra='"+$ext+"' ><input class='cantCar' type'text'  placeholder='cantidad'> <div class='TextAgr'>Agregar</div></button> </div>";
+  $Marco="<div class='marco_producto'> "+$EtiquetaDescuento+" "+$EtiquetasPrecio+"<a class='btn btn-sm '  data-toggle='modal' data-target='#myModal' data-remoto='"+$paq+"' data-extra='"+$ext+"'><div class='marco_foto'><img class='foto' id='imagen' src='"+$foto+"' alt='Muestra partes'/></div><div class='descripcion'><p style='color: black; font-weight: bold; margin-bottom: -1px;'>"+$descri+"</p><p>"+$fabricante+"<br>"+$EtiCod+"</p></div></a><button class='boton_agregar btn btn-sm fa fa-shopping-cart'  data-toggle='carAdd'  data-remoto='"+$paq+"' data-extra='"+$ext+"' ><input class='cantCar' type'text'  placeholder='cantidad'> <div class='TextAgr'>Agregar</div></button> </div>";
 
       var txt = document.getElementById('Centro');
       txt.insertAdjacentHTML('beforeend', $Marco);

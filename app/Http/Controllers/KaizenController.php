@@ -148,7 +148,6 @@ class KaizenController extends Controller
              
             if ($this->enFiltro($request, $value)) { 
                                                     $value['descuento']=$this->descuento($value, $ListDescuento);
-                                                    
                                                     $filtrado[]=$value;
         }                                          }
         return  $filtrado;                             
@@ -163,25 +162,26 @@ class KaizenController extends Controller
         $categoria= $producto['categoria'] ?? [];
         $Codigos=$producto['codigos_adicionales'] ?? '';
         $fabricante=$producto['codigo_fabricante'] ?? '';
-
+        $bandera=[];
         foreach ($datos as $key => $value) {
             $condicion[$key]=explode(',', $value);
         }
 
         $cmpld=count($condicion);
 
-       
-
         if (isset($condicion['palabra']))
-        {    
-            
-            $palabras=(count($condicion['palabra'])>1) ? count($condicion['palabra'])-1:0;
-            $cmpld=$cmpld+$palabras;
+        {      
+            //$palabras=(count($condicion['palabra'])>1) ? count($condicion['palabra'])-1:0;
+            //$cmpld=$cmpld+$palabras;
             foreach ($producto['descripcion'] as $key => $descripcion) {
-                 foreach ($condicion['palabra'] as $ind => $valor) { echo strtoupper($descripcion)."-".strtoupper($valor) ;
-                    if (strpos( strtoupper($descripcion), strtoupper($valor) )>-1)  { $bndr=$bndr+1; echo $bndr;}
+                 foreach ($condicion['palabra'] as $ind => $valor) {
 
-                   if ($producto['codigo']==$valor) { $bndr=$bndr+1; }
+                    if (strpos( strtoupper($descripcion), strtoupper($valor) )>-1)  { 
+                        //echo strtoupper($descripcion)."-".strtoupper($valor)."//" ;
+
+                        $bndr=$bndr+1; $bandera['palabra']='1'; }
+
+                    if ($producto['codigo']==$valor) { $bndr=$bndr+1; $bandera['palabra']='1';}
 
                    /*  foreach ($Codigos as $inco => $xCodigo) {
                         if ($xCodigo==$valor) { $bndr=$bndr+1; }
@@ -196,7 +196,7 @@ class KaizenController extends Controller
                  foreach ($condicion['marca'] as $ind => $valor) { 
                     if (substr( $descripcion,0,3)==$valor)  { 
                         //echo $producto['codigo'].": ".substr($descripcion,0,3)."  ".$valor."//";
-                         $bndr=$bndr+1; }
+                         $bndr=$bndr+1; $bandera['marca']='1';}
                  }     
             }      
         }        
@@ -207,7 +207,7 @@ class KaizenController extends Controller
         { 
             foreach ($modelo as $key => $descripcion) {
                  foreach ($condicion['modelo'] as $ind => $valor) {
-                    if (strpos( $descripcion, $valor )!==FALSE)  { $bndr=$bndr+1;}
+                    if (strpos( $descripcion, $valor )!==FALSE)  { $bndr=$bndr+1; $bandera['modelo']='1';}
                  }     
             }      
         }        
@@ -220,7 +220,7 @@ class KaizenController extends Controller
                     
                     foreach ($condicion['categoria'] as $ind => $valor) {     
                          
-                         if ($valor==$Subcategoria)  { $bndr=$bndr+1;}
+                         if ($valor==$Subcategoria)  { $bndr=$bndr+1; $bandera['categoria']='1';}
                     }       
                 }      
             }      
@@ -228,10 +228,16 @@ class KaizenController extends Controller
 
         if ((isset($condicion['fabricante']))and(strpos( $fabricante, $condicion['fabricante'][0] )!==FALSE))
         { 
-            $bndr=$bndr+1;      
+            $bndr=$bndr+1;      $bandera['fabricante']='1';
         }    
 
-        if ($bndr>=$cmpld) { return true; } 
+        if ((count($bandera)==$cmpld)or($cmpld==0)) { return true; }
+
+        $palacond=((isset($bandera['palabra']))and(isset($condicion['palabra'])));
+
+        //echo $palacond;
+
+        //if (($bndr>=$cmpld)and $palacond ) { return true; } 
 
         return false;
     }                                                           //Final de la Funcion enFiltro
@@ -264,7 +270,6 @@ class KaizenController extends Controller
 
     public function EstructuraDatosCar(Request $request)
         {
-            
             $paq = $request->campo;
             $ext = $request->descripcion;
 
@@ -285,11 +290,18 @@ class KaizenController extends Controller
 
     /* Panel de Administracion */
 
-    public function listadoProductos(Request $request)
+    public function OLDlistadoProductos(Request $request)
     {
         $request->referencia='productos';
         $ListProducto=$this->DevuelveBase($request);
         return view('administracion.productos')->with('producto',$ListProducto);
+    }
+
+     public function listadoProductos(Request $request)
+    {
+        $request->referencia='productos';
+        $ListProducto=$this->DevuelveBase($request);
+        return view('panel.producto')->with('producto',$ListProducto);
     }
 
     /* Operaciones Carrito */ 

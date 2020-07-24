@@ -45,7 +45,7 @@
     @INCLUDE('modal')
     <div class="row" id="work">
       
-      <div class="col-md-3 left_wind" id="left_wind">
+      <div class="col-md-3 left_wind" id="left_wind" style="padding: 2px;">
          <!--<div class="form-grup" style="margin-left: 15px;"  >
             <form>
               <input type="text" name="busqueda" placeholder='Buscar'>
@@ -54,14 +54,15 @@
          @INCLUDE('filtros.filtros')
       </div>
 
-      <div class="col-md-7"  > 
+      <div class="col-md-7 text-center" style="padding-right: 2px; padding-left: 1px;"> 
         @INCLUDE('filtros.selectores')
+        @INCLUDE('carrousel')
         <div class="container galeria_productos" >
             @yield('lista_productos')
         </div>
       </div>
 
-      <div class="col-md-2" id="right_wind" style="padding: 2px;">
+      <div class="col-md-2" id="right_wind">
           @INCLUDE('Carrito')
       </div>
 
