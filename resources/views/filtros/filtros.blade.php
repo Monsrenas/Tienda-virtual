@@ -1,127 +1,175 @@
-<!DOCTYPE html>
-<br>
+ 
+ 
 <style type="text/css">
-  .panel {
-    margin-bottom: 12px;
-    
-  } 
-
-.panel-body { max-height: 50%;
-                height: 50%; 
-                overflow: auto scroll; 
-                background: white;  
-             -webkit-box-shadow: inset 0px 0px 14px 0px rgba(32,73,144,1);
--moz-box-shadow: inset 0px 0px 14px 0px rgba(32,73,144,1);
-box-shadow: inset 0px 0px 14px 0px rgba(32,73,144,1);}
-
-.collapsed {
-  outline: none;
-}
-
 .barra {
-    background: #768AC2;
-
+  background: #FFFFFF;
+  height: 80px;
+  margin-bottom: 20px;
+  transition-duration:0.4s;
+  color: gray;
+  overflow: hidden;
+  font-family: 'Open Sans', sans-serif;
+  letter-spacing: 1px;
+  font-size: .8em;
+   border: 0px solid gray;
+   padding: 10px;
+   box-shadow: 8px 3px 6px 1px rgba(0, 0, 0, 0.20);
+ 
 }
 
-.IntHead {font-size: medium;
-          width: 100%;
-          text-align: center;
-          color: blue;
-          background: #dde6ff;
-          border-radius: 7px 7px 7px 7px;
--moz-border-radius: 7px 7px 7px 7px;
--webkit-border-radius: 7px 7px 7px 7px;
-border: 2px solid blue;
-        }
+.barra:hover {        
+                      height: 300px;
+                      transition-duration:0.6s;
+                      overflow: scroll;
+
+ } 
          
+ .filtros {
+              font-weight: normal;
+              margin-top: 4px;
+              margin-left: 15px;
+              color: black;
+              font-family: Copperplate / Copperplate Gothic Light, sans-serif;
+ }      
+
+ .filEtiqueta {
+                float: right; 
+                background: white; 
+                color: gray; 
+                padding: 4px;
+                margin-left: 10px;
+                margin-bottom: 4px;
+                margin-right: -2px; 
+                text-align: right;
+                vertical-align: middle;
+                display: inline-flex;
+
+              }
+
+.filEtiqueta div {  float: left;
+                    display: inline-flex;
+                    overflow: hidden; 
+                    font-size: .8em;
+                    color: red;
+                  }
+
+.btn_busqueda { width: 100%; 
+                margin-bottom: 2%; 
+                background: #F5F4F4; 
+                border: none;
+              } 
+
+             
+
 </style>
 
-<div class="container-fluid">
-<div id="faq" role="tablist" aria-multiselectable="true">
+<?php
+  $xfiltro=session("filtro");
+?>
+<div class="row">
+  <div class="col-sm-4 col-md-4 col-lg-12 col-xl-12" style="">
+        <table style="width: 100%;">
+          <tr>
+            <td>
+            <h6 class="filtros">CATEGORÍAS:</h6>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="filEtiqueta" style="display: none;" >
+                <div id="filtxtcategoria"></div>
+                <button id="DELcategoria" class="fa fa-times btn btn-sm delFiltro"></button>
+              </div>  
+            </td>
+        </tr>
+        </table>
 
-<div class="panel panel-default">
-<div class="panel-heading" role="tab" id="questionThree">
-<h5 class="panel-title">
-<a class="collapsed" data-toggle="collapse" data-parent="#faq" href="#answerThree" aria-expanded="false" aria-controls="answerThree">
-    <div>
-      <div class="IntHead">MARCAS / MODELOS</div>
-    </div> 
-</a>
-</h5>
-</div>
-<div id="answerThree" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="questionThree">
-<div class="panel-body" id="Interrogation">
-  @include('codificador.Marcas_Modelos');
-</div>
-</div>
-</div>
+       <div class="barra">
+          <input type="text" id="bsqudCategoria" class="btn_busqueda" style="" placeholder="&#128270" autocomplete="off" >  
+         @include('codificador.categorias')
+      </div>
+  </div>
 
+  <div class="col-sm-4 col-md-4 col-lg-12 col-xl-12" style="">
+       <table style="width: 100%;">
+        <tr>
+          <td>
+          <h6 class="filtros">MARCAS/MODELOS:</h6>
+          </td>
+        </tr>
+        <tr>    
+          <td>
+            <div class="filEtiqueta" style="display: none;" >
+              <div id="filtxtmarca"></div>
+              <button id="DELmarca" class="fa fa-times btn btn-sm delFiltro"></button>
+            </div> 
+             <div class="filEtiqueta" style="display: none;" >
+              <div class="textFiltro" id="filtxtmodelo"></div>
+              <button id="DELmodelo" class="fa fa-times btn btn-sm delFiltro"></button>
+            </div>
+          </td>
+      </tr>
+      </table>
 
-<div class="panel panel-default">
-<div class="panel-heading" role="tab" id="questionOne">
-<h5 class="panel-title">
-<a data-toggle="collapse" data-parent="#faq" href="#answerOne" aria-expanded="true" aria-controls="answerOne">
-  <div>
-    <div class="IntHead" >CATEGORIAS</div>
-  </div>  
-</a>
-</h5>
-</div>
-<div id="answerOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="questionOne">
-<div class="panel-body" id="categorias">
-      @include('codificador.categorias');
-</div>
-</div>
-</div>
+      <div class="barra">
+          <input type="text" id="bsqudModelos" class="btn_busqueda" style="" placeholder="&#128270" autocomplete="off" >  
+         @include('codificador.Marcas_Modelos')
+      </div>
+  </div>
 
-<div class="panel panel-default">
-<div class="panel-heading" role="tab" id="questionTwo">
-<h5 class="panel-title">
-<a class="collapsed" data-toggle="collapse" data-parent="#faq" href="#answerTwo" aria-expanded="false" aria-controls="answerTwo" target='_blank'>
-        <div class="IntHead">FABRICANTES</div> 
-</a>
-</h5>
-</div>
-<div id="answerTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="questionTwo">
-<div class="panel-body" id="Laboratory"> 
-       @include('codificador.fabricante');
-</div>
-</div>
-</div> 
-
-</div>
+  @if (isset($_SESSION['config']['fg']))
+    <div class="col-sm-4 col-md-4 col-lg-12 col-xl-12" style="">
+         <table style="width: 100%;">
+          <tr>
+            <td>
+            <h6 class="filtros" style="">FABRICANTES:</h6>
+            </td>
+           </tr>
+          <tr>
+            <td>
+              <div class="filEtiqueta" style="display: none;" >
+                <div id="filtxtfabricante">{{ $catFiltro??" "}} </div>
+                <button id="DELfabricante" class="fa fa-times btn btn-sm delFiltro"></button>
+              </div>  
+            </td>
+        </tr>
+        </table>
+        <div class=" barra">
+           @include('codificador.fabricante')
+        </div>
+    </div>
+  @endif
+ 
 </div>
     
 <!-- Initialize Bootstrap functionality -->
 <script>
 // Initialize tooltip component
-$(function () {
-  $('[data-toggle="tooltip"]').tooltip()
-})
-
-// Initialize popover component
-$(function () {
-  $('[data-toggle="popover"]').popover()
-})
+ var $filtro=<?php echo json_encode($xfiltro) ?>;
+  //$filtro.forEach(nombraFiltros);
+  $( document ).ready(function() {
+    nombraFiltros();
+    });
+  
 
   $('.panel-body').css("height", screen.height-510);
   $('.panel-body').css("max-height", screen.height-510);                          
 
   function SetDatos(id, nombre)
   {
-
+      registraFiltro("fabricante","fbr"+id);
+      /*
       var $resul=[];
       $resul['fabricante']=[]; 
-         
+          
+      $resul['fabricante']=id;
       
-       $resul['fabricante']=id;
-      
-       cargarListaProductos($resul);
-
+      MuestraProductos($resul);
+      */
   }
 
 
-  function FiltrarCategoria(id)
+function FiltrarCategoria(id)
 {
   var $resul=[];
   $resul['categoria']=[];
@@ -129,15 +177,49 @@ $(function () {
   //$resul['palabra']=[];
   //$resul['palabra'].push('monsrenas');
   
-  cargarListaProductos($resul);
+  MuestraProductos($resul);
 }
 
 
-$('body').on('click', '.xcaretX,.caretX', function(){      
+function registraFiltro($tipo, $id)
+{
+      $id=$id.substring(3);
+      $.get("/filtro/"+$tipo+"/"+$id, '', function(subpage)
+      {        
+          $filtro=subpage;
   
-    if ($(this).hasClass("caretX-down")||$(this).hasClass("xcaretX")){
-      FiltrarCategoria($(this)['0']['id']);    }
+          MuestraProductos("");
+          nombraFiltros();
+               
+      }).fail(function() {
+                            console.log('Error en carga de Datos');
+                         });
+}
 
+$('body').on('click', '.catRadio', function(){      
+     
+    if ($(this).hasClass("caretX-down")||$(this).hasClass("xcaretX")){
+      //FiltrarCategoria($(this)['0']['id']);
+      registraFiltro("categoria",$(this)['0']['id']); 
+    }
+      //FiltrarCategoria($(this)['0']['id']);
+      
+});
+
+$('body').on('click', '.modRadio,.marRadio', function(){      
+     
+      //FiltrarCategoria($(this)['0']['id']);
+     
+            var id=$(this)['0']['id'];
+            if (id.length>6) 
+            {
+              $("#DELmarca").click();
+                registraFiltro("modelo",$(this)['0']['id']);
+            } else{   
+                    $("#DELmodelo").click();
+                    registraFiltro("marca",$(this)['0']['id']);
+                  }
+        
 });
 
 
@@ -149,9 +231,10 @@ function FiltrarModelo(id)
   //$resul['palabra']=[];
   //$resul['palabra'].push('monsrenas');
   if (id.length>3) {$resul['modelo'].push(id);} else {$resul['marca'].push(id);}
-   cargarListaProductos($resul);
+   MuestraProductos($resul);
 }
 
+/*
 $('body').on('click', '.Xmarcas', function(){      
     if ($(this).hasClass("caret-down")||$(this).hasClass("xcaret")){
       FiltrarModelo($(this)['0']['id']);    }
@@ -159,9 +242,77 @@ $('body').on('click', '.Xmarcas', function(){
 });
 
 $('body').on('click', '.xModelo', function(){      
-      FiltrarModelo($(this).parent().parent().attr('id').substring(3)+$(this)['0']['id']);    
+      //FiltrarModelo($(this)['0']['id']);
+       //FiltrarModelo($(this).parent().parent().attr('id').substring(3)+$(this)['0']['id']);      
 });
+*/
+$('body').on('keyup', '#bsqudCategoria', function(){      
+     
+      FiltraListado([$(this).val(), "caretX", "xcaretX","caretX-down","nestedX","activeX"]); 
+});
+
+$('body').on('keyup', '#bsqudModelos', function(){      
+     
+      FiltraListado([$(this).val(), "caret", "xModelo","caret-down","nested","active"]); 
+});
+
+function FiltraListado($itm) 
+{  
+      text=$itm[0];
+      
+      if (text=="") {
+                        $("."+$itm[1]+", ."+$itm[2]).show(); 
+                        //$( "."+$itm[1]+"."+$itm[3] ).click();
+                        
+                             $( "."+$itm[1] ).removeClass($itm[3]);
+                            
+                             $("."+$itm[4]).removeClass($itm[5]);
+                        return; 
+                    }
+
+      
+      $( "."+$itm[1]+":not(."+$itm[3]+")" ).addClass($itm[3]);
+      //$(".nested:not(.caret-down)").show();
+      $("."+$itm[4]+":not("+$itm[5]+")").addClass($itm[5]);
+                 
+      //$( "."+$itm[1]+":not(."+$itm[3]+")" ).click();
+      lista=$("."+$itm[1]+", ."+$itm[2]);
+      for (var i = 0; i < lista.length; i++)
+      {
+
+          if (lista[i].innerText.toUpperCase().indexOf(text.toUpperCase())<0)
+          { 
+              $("#"+lista[i].id).hide(); 
+          } 
+          else {
+                    $("#"+lista[i].id).show(); 
+                }
+      }
+}
+
+$('body').on('click', '.delFiltro', function(){      
+     categoria=($(this)[0].id).substring(3);
+     registraFiltro(categoria, "");
+     $("#filtxt"+categoria).parent().hide();
+     $("."+categoria.substring(0,3)+"Radio").prop("checked", false);
+});
+
+
+function nombraFiltros()
+{
+    console.log($filtro);
+    for (const property in $filtro) {
+        pfj="";
+        if (property=="categoria") {pfj="pdr"}
+        if (property=="modelo") {pfj="mdl"}
+          if (property=="marca") {pfj="mrc"}
+        $("#filtxt"+property).empty().append($("#"+pfj+$filtro[property])[0].innerText);
+        $("#filtxt"+property).parent().show();
+    }
+}
+
 
   /*PreLoadDataInView('#Interrogation', '&modelo=Interrogation&url=consultation.interrogation', 'flexlist');
    echo VIEW::make("consultation.PhysicalExamination")*/
 </script>
+

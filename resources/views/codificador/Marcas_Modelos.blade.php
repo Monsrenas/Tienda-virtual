@@ -24,7 +24,7 @@ ul, #myUL {
 
 .xcaret::before {
   content: "\25B7";
-  color: black;
+  /*color: black;*/
   display: inline-block;
   margin-right: 6px;
 }
@@ -39,7 +39,7 @@ ul, #myUL {
 
 .caret::before {
   content: "\25B6";
-  color: black;
+ /*color: black;*/
   display: inline-block;
   margin-right: 6px;
 }
@@ -52,6 +52,9 @@ ul, #myUL {
 
 .nested {
   display: none;
+  font-weight: lighter;
+  margin-left: 6px;
+
 }
 
 .active {
@@ -74,7 +77,7 @@ ul, #myUL {
   padding: 5px
 } 
 
-.lista { font-size: 0.74em; }
+.lista { /*font-size: medium;*/ }
 
 .galeria_productos
 {
@@ -93,31 +96,79 @@ ul, #myUL {
         }
 </style>
 
+<script type="text/javascript">
+  function insertItem(marca, modelos)
+  {   
+
+      var $contenedor='myUL';
+      var $submenu=modelos;
+      $id=marca['id_marca'];
+
+      //var $submenu=$modelos;
+      
+       
+      if ($submenu) { 
+
+      $element="<li><span class='caret Xmarcas marRadio' id='mrc"+$id+"' active>  "+marca['nombre']+"</span><ul class='nested' id='"+$id+"'>";
+      /*<input id='rmm"+$id+"' class='' type='radio' name='modRadio'>*/
+     
+      for (const prop in $submenu)
+          {
+            var $burbuja="";
+            var $año="";
+     
+          $modName="<b style='color: gray'>"+$submenu[prop]['nombre']+"</b>";
+     
+
+          $element=$element+"<li id='mdl"+$submenu[prop]['id_modelo']+"' class='modRadio'><a href='#' id='"+$submenu[prop]['id_modelo']+"' class='dmrc"+$id+" xModelo'><span>"+$modName+"</span></a></li>" ;
+          /* <input id='mdl"+$submenu[prop]['id_modelo']+"' class='' type='radio' name='modRadio'> */
+          }
+
+      $element=$element+"</ul></li>";
+      } else {
+                $element="<li id='mrc"+$id+"' class=''><a href='#' id='mar"+$id+"' class='xNmodel'><span id='mrc"+$id+"' class='xcaret Xmarcas marRadio' active>"+marca['nombre']+"</span></a><ul class='nested'></ul></li>";
+                /*<input id='rmm"+$id+"' class='' type='radio' name='marRadio'>*/
+      }
+
+      var txt = document.getElementById($contenedor);
+      txt.insertAdjacentHTML('beforeend', $element); 
+  }
+</script>
+
 <!DOCTYPE html>
+<?php 
+      use App\Marca;
+      $lista=Marca::get();  
+  ?>
 <html>
 <head>
   <title></title>
-  <link rel="stylesheet" href="{{'css/ToolTip.css'}}">
+  {{--<link rel="stylesheet" href="{{'css/ToolTip.css'}}">--}} 
 </head>
 <body>
+    
+
     <form class="form-grup" id="formBuscarModelo">
       @csrf
       
-      <input type="text" name="busqueda" style="width: 100%; margin-bottom: 5%;" placeholder="Filtrar modelos" onkeyup="filtraMarcaModelo(this.value)">    
+     {{-- <input type="text" name="busqueda" style="width: 100%; margin-bottom: 2%; background: #F5F4F4; border: none;" placeholder="🔎" onkeyup="filtraMarcaModelo(this.value)"> --}}   
   </form>
-  <ol id="myUL" class="lista">
+  <ol id="myUL" class="listas">
   </ol>
+  @foreach($lista as $patmt)
+   
+     <script type="text/javascript">
+      insertItem(<?php echo json_encode($patmt); ?>, <?php echo json_encode($patmt->modelos); ?>);
+     </script> 
+    @endforeach 
 </body>
 </html>
 <script type="text/javascript">
     /* carga el Arbol de marcas y modelos */
-LoadDataList();
-
+//LoadDataList();
+activaMenu();
 function activaMenu()
 {
-
-  console.log('Prueba de llamada');
-
      var toggler = document.getElementsByClassName("caret");
             var i;
 
@@ -137,9 +188,9 @@ function activaMenu()
   }
 
 function LoadDataList() { 
-       
-    $.get('Leerbase', '{{ csrf_token() }}', function(subpage){ 
-        
+     
+   
+  $.get('/ListaMarcasModelos', '', function(subpage) {  
           for (const prop in subpage)
                                     {
                                         insertItem('myUL', subpage[prop], prop);
@@ -147,14 +198,15 @@ function LoadDataList() {
                                     }
          var toggler = document.getElementsByClassName("caret");
             var i;
-
+            console.log(toggler);
             for (i = 0; i < toggler.length; i++) {
+
               toggler[i].addEventListener("click", function() { 
                 this.parentElement.querySelector(".nested").classList.toggle("active");
                 this.classList.toggle("caret-down");
               });
               }
- 
+     
 
     })  .fail(function() {
                             console.log('Error en carga de Datos');
@@ -163,39 +215,7 @@ function LoadDataList() {
 
 
 
-  function insertItem($contenedor, $objeto, $id)
-  {   
-      $submenu=$objeto['modelos'];
-      if ($submenu) { 
 
-      $element="<li><span class='caret Xmarcas' id='"+$id+"' active>"+$objeto['nombre']+"</span><ul class='nested' id='mrc"+$id+"'>";
-      
-      for (const prop in $submenu)
-          {
-            var $burbuja="";
-            var $año="";
-          //   $element=$element+"<li id='mdl"+prop+"'><a  href='javascript:FiltrarModelo(\""+$id+prop+"\");' id='"+prop+"' class='dmrc"+$id+"'>"+$submenu[prop]['nombre']+"</a></li>" ;
-          $modName="<b style='color: gray'>- "+$submenu[prop]['nombre']+"</b>";
-          if (typeof $submenu[prop]['motor'] != "undefined") { $modName+=" "+$submenu[prop]['motor']}
-          if (typeof $submenu[prop]['cilindraje'] != "undefined") { $modName+=" "+$submenu[prop]['cilindraje']}  
-          if (typeof $submenu[prop]['inicio'] != "undefined") { $año+=$submenu[prop]['inicio']}
-
-          if (typeof $submenu[prop]['final'] != "undefined") { $año+="-"+$submenu[prop]['final']}
-          if (typeof $submenu[prop]['info'] != "undefined") { $burbuja=$submenu[prop]['info']}
-             
-          if ($año!="") { $modName+=" ( "+$año+" )"; }
-
-          $element=$element+"<li id='mdl"+prop+"'><a href='#' id='"+prop+"' class='dmrc"+$id+" xModelo'><span tooltip='"+$burbuja+"'  >"+$modName+"</span></a></li>" ;
-          }
-
-      $element=$element+"</ul></li>";
-      } else {
-                $element="<li id='mrc"+$id+"'><a href='#' id='"+$id+"' class='xNmodel'><span id='"+$id+"' class='xcaret Xmarcas' active>"+$objeto['nombre']+"</span></a><ul class='nested'></ul></li>";
-      }
-
-      var txt = document.getElementById($contenedor);
-      txt.insertAdjacentHTML('beforeend', $element); 
-  }
 
 
   function filtraMarcaModelo(texto)

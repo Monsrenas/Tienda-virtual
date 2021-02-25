@@ -1,18 +1,33 @@
- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
- 
+<style type="text/css">
+  .FabClas a:hover { 
+            background: gray;
+            color: white; 
+            display: inline-flex;
+            text-decoration-line: none;
+          }
+  .FabClas a {
+      
+        font-size: medium;
+        color: gray;
 
+    }   
+
+  .FabClas li { 
+                  list-style-type: none;
+             }       
+</style>
     
   <form class="form-grup" id="formBuscar">
       @csrf
-      <input type="text" name="referencia" value="fabricantes" hidden="">
-      <input type="text" name="busqueda" style="width: 100%; margin-bottom: 5%;" placeholder="Ocurrencia para busqueda" onkeyup="NuevaLista(this.value, 'ListaFabricante')" >    
+      <input type="text" name="coleccion" value="Fabricante" hidden="">
+      <input type="text" name="busqueda" style="width: 100%; margin-bottom: 2%; background: #F5F4F4; border: none;" placeholder="&#128270" onkeyup="NuevaLista(this.value, 'ListaFabricante')" autocomplete="off" >    
   </form>
 
-    <div id="MemoriaFabricantes" hidden=""  >
+    <div id="MemoriaFabricantes" class="FabClas" hidden=""  >
       
     </div>
 
-    <div id="ListaFabricante"  class="list-group list-group-flush ListFabricant">
+    <div id="ListaFabricante"  class="list-group list-group-flush ListFabricant FabClas">
       
     </div>
 
@@ -30,14 +45,14 @@
   {  
      $data=$("#"+$ElForm).serialize();
 
-     $.get('DevuelveBase', $data, function(subpage){ 
+     $.get('/Resgistro', $data, function(subpage){ 
         var $element='';  var $elemenX='';
         for (const prop in subpage)
             {
-              $element=$element+"<li><a id='"+prop+"' class='guardados'>"+subpage[prop]+"</a></li>" ;
+              $element=$element+"<li><a id='"+subpage[prop]['codigo']+"' class='guardados'>"+subpage[prop]['nombre']+"</a></li>" ;
                
-              $datos=[prop.toString(),subpage[prop].toString()];
-              $elemenX=$elemenX+"<li><a href=\"javascript:SetDatos('"+prop+"','"+subpage[prop]+"');\" id='"+prop+"' class='fbct' >"+subpage[prop]+"</a></li>" ;
+              $datos=[subpage[prop]['codigo'].toString(),subpage[prop]['nombre'].toString()];
+              $elemenX=$elemenX+"<li><a href=\"javascript:SetDatos('"+subpage[prop]['codigo']+"','"+subpage[prop]['nombre']+"');\" id='"+subpage[prop]['codigo']+"' class='fbct' >"+subpage[prop]['nombre']+"</a></li>" ;
             }      
 
           var txt = document.getElementById($Memoria);

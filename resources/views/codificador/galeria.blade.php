@@ -16,12 +16,12 @@
           }
 
      .marco_producto:hover {
-  transform: scale(1.02); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
-  -webkit-box-shadow: 1px 3px 12px 6px rgba(58,58,58,0.79); 
-box-shadow: 1px 3px 12px 6px rgba(58,58,58,0.79);
-transition-duration:0.6s;
+                              transform: scale(1.02); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+                              -webkit-box-shadow: 1px 3px 12px 6px rgba(58,58,58,0.79); 
+                            box-shadow: 1px 3px 12px 6px rgba(58,58,58,0.79);
+                            transition-duration:0.6s;
     
-}
+      }
 
   .marco_foto {
       width: 88%;
@@ -38,7 +38,8 @@ transition-duration:0.6s;
       object-fit: cover;
       object-position: center center;
       padding: 4px;
-    }      
+    }
+  }      
 
   .descripcion {  padding: 5px;
           font-size: .8em;
@@ -47,6 +48,7 @@ transition-duration:0.6s;
           height: 60px;
           overflow: hidden;
          }
+         
   .descripcion p { color: #0055ff; 
            margin-top: 0px;}
 </style>

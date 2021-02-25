@@ -1,55 +1,49 @@
-<style type="text/css">
-  .navbar-custom {
-    background-color: #ff5500;
-}
-/* change the brand and text color */
-.navbar-custom .navbar-brand,
-.navbar-custom .navbar-text {
-    color: rgba(255,255,255,.8);
-}
-/* change the link color */
-.navbar-custom .navbar-nav .nav-link {
-    color: rgba(255,255,255,.5);
-}
-/* change the color of active or hovered links */
-.navbar-custom .nav-item.active .nav-link,
-.navbar-custom .nav-item:hover .nav-link {
-    color: #ffffff;
-}
-</style>
+<div id="tope"></div>
+<nav class="navbar  navbar-expand-md justify-content-between barra-Menu" >
+    <div class="container-fluid">
+      
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-nav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-<nav class="navbar navbar-expand-lg bg-primary navbar-custom">
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+        <div class="navbar-collapse collapse dual-nav w-50 order-1 order-md-0">
+          <a href="javascript:MuestraProductos('')" style="text-align: center;">
+          <span style="font-size: 2em;font-weight:900; font-family: 'Times New Roman', Times, serif; color: white; text-shadow:5px 3px 7px #040452; line-height : 10px;">{{$nom1 ?? ""}}<br> 
+            <span style="font-size: .54em;font-weight:100; font-family: 'Arial';">{{$nom2 ?? ""}}</span>
+          </span>
+          </a>
+        </div>
 
-    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
- 
-    </ul>
+        <div class="navbar-collapse collapse dual-nav w-25 order-0 order-md-0">
+          <a href="javascript:MuestraProductos('')">
+          <span ><i class="fa fa-home" style="color: white; font-size: 2em;" aria-hidden="true"></i>
 
+          </span>
+          </a>
+        </div>
 
-
-    <form class="form-inline my-2 my-lg-0">
-     <div id="operaUser" style="display: none");> 
-     <ul class="navbar-nav mr-auto my-2 mt-lg-0 ">
-       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="dataUser" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Usuario
-        </a>
-        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-          <li><a class="dropdown-item" href="#">Correo</a></li>
-          <li><a class="dropdown-item" href="javascript:cerrar()">Cerrar Seción</a></li>
-        </ul>
-      </li>
-    </ul>
+        <a  class="navbar-brand mx-auto d-block text-center order-0 order-md-1 w-10">@INCLUDE('filtros.selectores')</a>
+        <div class="navbar-collapse collapse dual-nav w-50 order-2">
+          <ul class="nav navbar-nav ml-auto">
+            <form class="form-inline my-2 my-lg-0">
+               <div id="operaUser" style="display: none");> 
+                 <ul class="navbar-nav mr-auto my-2 mt-lg-0 ">
+                   <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="dataUser" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Usuario
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                      <li><a class="dropdown-item" href="#">Correo</a></li>
+                      <li><a class="dropdown-item" href="javascript:cerrar()">Cerrar Seción</a></li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+            <!--<input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">-->
+            <button  style=" color: white" class="btn btn-outline-link my-1 my-sm-0 fa fa-user-circle" type="button" data-target='#myModal' data-toggle='modal' onclick="Modal('autenticacion.login','anc','asd')"> Iniciar sesión</button>
+            <!--<button class="btn btn-outline-secondary my-2 my-sm-0 fa fa-user" type="button"> Registrarte</button>-->
+          </form> 
+          </ul>
+        </div>
     </div>
-      <!--<input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">-->
-      <button  style="margin-right: 4px; color: white" class="btn btn-outline-success my-2 my-sm-0 fa fa-user-circle" type="button" data-target='#myModal' data-toggle='modal' onclick="Modal('autenticacion.login','anc','asd')"> Iniciar sesión</button>
-      <!--<button class="btn btn-outline-secondary my-2 my-sm-0 fa fa-user" type="button"> Registrarte</button>-->
-    </form>     
-
-        
-  </div>
 </nav>
-

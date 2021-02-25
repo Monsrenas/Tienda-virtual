@@ -1,3 +1,4 @@
+
 <main role="main" class="container my-auto">
     <div class="row">
         <div id="login" class=" col-12">
@@ -19,9 +20,9 @@
                     Entrar
                 </button>
                 <br>
-                <a href="#"> Olvidé mi contraseña.</a>
+                <a href="javascript: ResetPassword()"> Olvidé mi contraseña.</a>
                 <br><br>
-                <button id="seRegistra" class="btn btn-success mb-2" 
+                <button id="seRegistra" class="btn btn-success mb-2" type="button" 
                     onclick="Modal('autenticacion.registro','anc','asd')" >
                     Registrarse
                 </button>
@@ -33,14 +34,23 @@
 
 
 <script type="text/javascript">
-    $("body").on('change','input', function(){
+
+$('input').attr("autocomplete","off");
+
+$("body").on('keyup','input', function(){
  
   $('#MnsgError').empty();
 });
 
-function pruebame()
+function ResetPassword()
 {
 
-    alert('no hay lio');
+    firebase.auth().sendPasswordResetEmail($('#MIcorreo').val()).then(function() {
+    // Email sent.
+    $('#MnsgError').empty().append("<span style='color: blue;'>Se ha enviado un enlace de recuperación a su buzón de correos</span>");
+    }).catch(function(error) {
+      // An error happened.
+      $('#MnsgError').empty().append("Escriba su dirección de correo, previamente registrada, en un formato correcto");
+    });
 }    
 </script>

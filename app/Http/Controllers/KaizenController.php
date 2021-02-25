@@ -11,6 +11,13 @@ use Kreait\Firebase\Database;
 use Kreait\Firebase\Firestore;
 use View;
 
+use Illuminate\Support\Collection;
+use App\Marca;
+use App\Modelo;
+use App\Categoria;
+use App\Fabricante;
+use App\Medida;
+
 class KaizenController extends Controller
 {
     //
@@ -42,6 +49,110 @@ class KaizenController extends Controller
         ->createStorage();
         dd($firebase);
         return $firebase->getDatabase();
+    }
+
+    public function MongoStore(Request $request)
+    {
+         
+     /*   $a=false;
+        $todo=Marca:: when($a, function($q){
+            return $q->whereHas('modelos', function($query){$query->where('nombre', 'Golf Plus'); });
+        })->get();
+        
+      return View('panel.editaMarcaModelo')->with('lista',$todo);    */
+      
+
+/*
+     $database=$this->index();
+
+      $reference = $database->getReference('Medidas');
+      $Snapshot=$reference->getSnapshot();
+      $categoria = $Snapshot->getValue();
+
+      
+       foreach ($categoria as $cod => $xItem) {   
+                             $Rcategoria= new Medida;
+                             
+                             $p = strpos($xItem['nombre'], ':');
+                             $Rcategoria->codigo=substr($xItem['nombre'],0,$p);
+                             $Rcategoria->nombre=substr($xItem['nombre'],$p+1);
+                             echo $Rcategoria->codigo." - ".$Rcategoria->nombre."<br>";
+                             $Rcategoria=collect($Rcategoria);
+                             Medida::create($Rcategoria->all());
+            }  
+
+
+/*
+      $database=$this->index();
+
+      $reference = $database->getReference('FABR');
+      $Snapshot=$reference->getSnapshot();
+      $categoria = $Snapshot->getValue();
+
+      
+       foreach ($categoria as $cod => $xItem) {
+                             $Rcategoria= new Fabricante;
+                             
+                             $Rcategoria->codigo=str_pad($cod, 4, "0", STR_PAD_LEFT);
+                             $Rcategoria->nombre=$xItem['nombre'];
+
+                             $Rcategoria=collect($Rcategoria);
+                             Fabricante::create($Rcategoria->all());
+            }  
+*/
+
+/*
+
+      $database=$this->index();
+
+      $reference = $database->getReference('categorias');
+      $Snapshot=$reference->getSnapshot();
+      $categoria = $Snapshot->getValue();
+
+      
+       foreach ($categoria as $cod => $xItem) {
+                             $Rcategoria= new Categoria;
+                             echo $cod."- ".$xItem."<br>";
+                             $Rcategoria->codigo=$cod;
+                             $Rcategoria->nombre=$xItem;
+                             $Rcategoria=collect($Rcategoria);
+                             Categoria::create($Rcategoria->all());
+            }  
+
+
+*/
+
+    /*    $registro=new Marca;
+        $Rmodelos=new Modelo;
+        $deFirebade=$this->Leerbase();
+        foreach ($deFirebade as $cod => $marca)
+       {
+            $nombre=$marca['nombre'];
+            $id_marca=strval($cod);
+            $modelos=[];
+            if (isset($marca['modelos'])){
+                    echo $cod;
+                    foreach ($marca['modelos'] as $mod => $modelo) {
+                             echo ".";
+                             $Rmodelos->id_modelo=($cod.$mod); 
+                             $Rmodelos->id_marca=$id_marca;
+                             $Rmodelos->nombre=$modelo['nombre'];
+                             $RegModelos=collect($Rmodelos);
+                             Modelo::create($RegModelos->all());
+                           }   echo "<br>";    
+               }
+            $registro->id_marca=$id_marca;
+            $registro->nombre=$nombre;
+            
+            $RegMarcas = collect($registro);
+
+            Marca::create($RegMarcas->all());
+        
+        }
+        
+
+
+      */  
     }
 
 
@@ -242,13 +353,6 @@ class KaizenController extends Controller
         return false;
     }                                                           //Final de la Funcion enFiltro
 
-
-
-    public function descuento()
-    {
-        return 10;
-    }
-
     public function yxVista(Request $request){    
             $view = View::make($request->url);
             
@@ -347,7 +451,7 @@ class KaizenController extends Controller
         return $Vista;
     } 
 
-    public   function getImageRelativePathsWfilenames()
+    public function getImageRelativePathsWfilenames()
     {
         $lista=array_merge(glob("*.jp*"),glob("*.png"));
      
@@ -355,6 +459,247 @@ class KaizenController extends Controller
         //echo "$filename -------- size " . filesize($filename) . "<br>";}
      
         return $lista;
+    }
+
+    public function PasaFabricantes()
+    {
+        $fabr=$this->ListaDeLosFabricantes();
+        
+        for ($i=1; $i<count($fabr)  ; $i++) {
+            # code...
+            $nuevoID=str_pad($i, 4, "0", STR_PAD_LEFT);
+            $todo=new Fabricante;
+            $todo->codigo=$nuevoID;
+            $todo->nombre=$fabr[$i];
+            $todo=collect($todo);
+            $busca=Fabricante::where('codigo', $nuevoID)->first();
+            
+            if (!$busca) { echo $i." -".$fabr[$i]."-  Nuevo <br>"; Fabricante::create($todo);
+                         } else {    echo $i." -".$fabr[$i]."-  Actualzado <br>";
+                                    $busca->nombre=$fabr[$i];
+                                    $busca->save();}
+        }
+
+    }
+
+    public function ListaDeLosFabricantes()
+    {
+        $fabr=["FABRICANTE",
+"555J",
+"A-N PARTS",
+"ABP",
+"ABRO",
+"ACC",
+"ACDELCO",
+"ADVANCE",
+"AGP",
+"AISAN",
+"AISIN",
+"ALLPARTS",
+"AMALIE",
+"AMC",
+"AMERICAN RUBBER",
+"ART",
+"ATE",
+"AYG",
+"BANDO",
+"BARDAHL",
+"BESSER",
+"BGF",
+"BOSCH",
+"BRAKE PAK",
+"CALORSTAT",
+"CAMVUCOL",
+"CAR-DEX",
+"CENTURY",
+"CHAMP",
+"CHIN DEN",
+"CMB",
+"COFAP",
+"CTR",
+"CYCLO",
+"DAIDO METAL",
+"DANA SPICER",
+"DANA TRANSEJES",
+"DAYCO",
+"DDT",
+"DELPHI",
+"DENSO",
+"DEPO",
+"DGC",
+"DLAA",
+"DLZ",
+"DONGIL",
+"DROCARAS",
+"DS",
+"DTC",
+"EVERSPARK",
+"EXEDY",
+"FANAUTO",
+"FIC",
+"FILTER MASTER",
+"FITORI",
+"FPI",
+"FRACO",
+"FRAM",
+"FREEZETONE",
+"FRENEC",
+"FRIPARTS",
+"FUJI",
+"FV",
+"G-CONTROL",
+"GDN",
+"GEN",
+"GLOBAL BRAKE PARTS",
+"GM",
+"GMB",
+"GOLDEN BEAR",
+"GP",
+"GSP",
+"GUAYAS B&G",
+"GULF",
+"HECLES",
+"HERKO",
+"HIGH POWER",
+"HKT",
+"HORNG LING",
+"HUSHAN",
+"HVP",
+"HYDRAULAN",
+"HYUNDAI",
+"HYUNJIN",
+"I&R",
+"IBUKI",
+"ICHIBAN",
+"INCOLCA",
+"INR",
+"JCAP",
+"JCC",
+"JFP",
+"KASHIMA",
+"KCM",
+"KENDALL",
+"KGK",
+"KIA",
+"KINZO",
+"KOWA",
+"KOYO",
+"KP",
+"KTY",
+"KYB",
+"KYOSAN",
+"LASTING",
+"LECAM",
+"LIAN TUOH",
+"LUCID",
+"LUK",
+"MAC",
+"MACHAGE",
+"MAHIRO",
+"MAHLE",
+"MANDO",
+"MARALPA",
+"MAXFIT",
+"MAZDA",
+"MDS",
+"MECARM",
+"MILLARD",
+"MITSUBA",
+"MITSUBISHI",
+"MOBIS",
+"MONROE",
+"MOOG",
+"MORESA",
+"MOTOR SEVEN",
+"MOTOREX",
+"MRK",
+"MUSASHI",
+"NACHI",
+"NAKAJIMA",
+"NAP",
+"NAPA",
+"NAPCO",
+"NDC",
+"NEW-ERA",
+"NGK",
+"NITRO OBD2",
+"NJ",
+"NKK",
+"NP",
+"NPR",
+"NPW",
+"NSK",
+"NTN",
+"OKAMI",
+"OP",
+"OPTIBELT",
+"OSK",
+"PARTS-MALL",
+"PEAK",
+"PERMATEX",
+"PEVISA",
+"PHILIPS",
+"PHILLIPS 66",
+"POLAR",
+"PORTER",
+"POS",
+"PRESTONE",
+"PROMAX",
+"PTY",
+"RALLY",
+"RC",
+"RECORD",
+"REPSOL",
+"ROCKY",
+"SABO",
+"SAKURA",
+"SAMGONG GEAR",
+"SAMURY",
+"SANWA",
+"SEIKEN",
+"SEIWA",
+"SEN-JEC",
+"SH",
+"SHOGUN",
+"SIMYI",
+"SKF",
+"SKYFIL",
+"STARK",
+"SUN",
+"TAIHO",
+"TAMA",
+"TBK",
+"TCIC",
+"TECFIL",
+"TEIKIN",
+"TEZUKA",
+"TFP",
+"THG",
+"THO",
+"TMM",
+"TOKICO",
+"TONG YANG",
+"TOP MASTER",
+"TOYOTA",
+"TP",
+"TRG",
+"TRW",
+"TSK",
+"TYC",
+"UNICK",
+"V-WIN",
+"VALEO",
+"VARIOS",
+"VISTONY",
+"WAGNER",
+"WTB",
+"XTRAGUARD",
+"YAU YOUNG",
+"YEC",
+"YSK",
+"YSM"];
+
+return $fabr;
     }
 
 }
