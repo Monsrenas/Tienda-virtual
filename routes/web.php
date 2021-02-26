@@ -13,7 +13,7 @@ if (!isset($_SESSION['empresa'])) {
         							 $_SESSION['empresa']=$todo;
         							}
        							  
-$todo=Configuracion::first();
+ $todo=Configuracion::first();
 $_SESSION['config']=$todo->config;
 
 /*
@@ -129,7 +129,6 @@ Route::group(['middleware' => 'auth'], function()
 		Route::get('InfoPrevioARecepcon','InventarioController@InfoPrevioARecepcon');
 		
 		
-
 		//Usuarios
 		  Route::get('Perfil', function () { 
 												$lista=Usuario::find(Auth::user()->_id); 
@@ -162,6 +161,7 @@ Route::group(['middleware' => 'auth'], function()
 		
 		Route::get('delFiles','MongoController@delFiles');
 });
+
 //Ventas
 
 Route::get('/ProcesaPedido', function () {
